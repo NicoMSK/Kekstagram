@@ -1,6 +1,8 @@
 import { FullScreenImageDisplay } from "./FullScreenImageDisplay";
 import { ImageFilter } from "./ImageFilter";
+import { UsersImage } from "./UsersImage";
 import { UploadingNewImage } from "./UploadingNewImage";
+import photo1 from "./photos/1.jpg";
 
 export function MainBlock() {
   return (
@@ -12,6 +14,8 @@ export function MainBlock() {
           Фотографии других пользователей
         </h2>
         <UploadingNewImage />
+
+        <UsersImage imgUrl={photo1} alt="" />
       </section>
       <FullScreenImageDisplay />
     </main>
