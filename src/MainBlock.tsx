@@ -2,7 +2,7 @@ import { FullScreenImageDisplay } from "./FullScreenImageDisplay";
 import { ImageFilter } from "./ImageFilter";
 import { UsersImage } from "./UsersImage";
 import { UploadingNewImage } from "./UploadingNewImage";
-import photo1 from "./photos/1.jpg";
+import { imagesUrl } from "./imageData";
 
 export function MainBlock() {
   return (
@@ -14,8 +14,9 @@ export function MainBlock() {
           Фотографии других пользователей
         </h2>
         <UploadingNewImage />
-
-        <UsersImage imgUrl={photo1} alt="" />
+        {imagesUrl.map((item) => (
+          <UsersImage imgUrl={item} alt="" />
+        ))}
       </section>
       <FullScreenImageDisplay />
     </main>

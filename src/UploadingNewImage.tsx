@@ -7,31 +7,31 @@ import { useState } from "react";
 export function UploadingNewImage() {
   const [editImage, setEditImage] = useState(false);
 
-  function openImageEditing() {
-    document.body.classList.add("modal-open");
-    setEditImage(true);
-  }
+  // function openImageEditing() {
+  //   document.body.classList.add("modal-open");
+  //   setEditImage(true);
+  // }
 
   function closeEditingWindow() {
     document.body.classList.remove("modal-open");
     setEditImage(false);
   }
 
-  function closeEditingWindowEsc(event: React.KeyboardEvent<HTMLInputElement>) {
-    if (event.key === "Escape") {
-      closeEditingWindow();
-    }
-  }
+  // function closeEditingWindowEsc(event: React.KeyboardEvent<HTMLInputElement>) {
+  //   if (event.key === "Escape") {
+  //     closeEditingWindow();
+  //   }
+  // }
   ///???
-  function closeOnBackDropClick(event) {
-    const currentTarget = event.currentTarget;
-    const target = event.target;
-    const isClickedOnBackDrop = target === currentTarget;
-    if (isClickedOnBackDrop) {
-      console.log("click???");
-      closeEditingWindow();
-    }
-  }
+  // function closeOnBackDropClick(event) {
+  //   const currentTarget = event.currentTarget;
+  //   const target = event.target;
+  //   const isClickedOnBackDrop = target === currentTarget;
+  //   if (isClickedOnBackDrop) {
+  //     console.log("click???");
+  //     closeEditingWindow();
+  //   }
+  // }
 
   return (
     <section className="img-upload">
@@ -52,11 +52,11 @@ export function UploadingNewImage() {
               id="upload-file"
               name="filename"
               required
-              onChange={(e) => {
-                closeOnBackDropClick(e);
-                openImageEditing();
-              }}
-              onKeyDown={closeEditingWindowEsc}
+              // onChange={
+              //   // closeOnBackDropClick(e);
+              //   openImageEditing();
+              // }
+              // onKeyDown={closeEditingWindowEsc}
             />
             <label
               className="img-upload__label  img-upload__control"
