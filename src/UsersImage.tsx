@@ -5,13 +5,16 @@
 type UsersImageProps = {
   imgUrl: string;
   alt: string;
+  commentsAmount: number;
+  likesAmount: number;
+  onClick: () => void;
 };
 
 export function UsersImage(props: UsersImageProps) {
-  const { imgUrl, alt } = props;
+  const { imgUrl, alt, commentsAmount, likesAmount, onClick } = props;
 
   return (
-    <a className="picture" href="#">
+    <a className="picture" href="#" onClick={onClick}>
       <img
         className="picture__img"
         src={imgUrl}
@@ -20,8 +23,8 @@ export function UsersImage(props: UsersImageProps) {
         alt={alt}
       />
       <p className="picture__info">
-        <span className="picture__comments"></span>
-        <span className="picture__likes"></span>
+        <span className="picture__comments">{commentsAmount}</span>
+        <span className="picture__likes">{likesAmount}</span>
       </p>
     </a>
   );
