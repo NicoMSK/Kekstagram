@@ -7,6 +7,8 @@ import { useState } from "react";
 export function UploadingNewImage() {
   const [editImage, setEditImage] = useState(false);
 
+  ///создать util файл для этих функций
+
   // function openImageEditing() {
   //   document.body.classList.add("modal-open");
   //   setEditImage(true);

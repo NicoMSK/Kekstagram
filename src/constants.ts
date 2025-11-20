@@ -51,7 +51,7 @@ export const imageDescription = Array.from({ length: 25 }, (_, i) => {
   const commentsAmount = getRandomInteger(MIN_COMMENT, MAX_COMMENT);
 
   return {
-    id: Date.now(),
+    id: postNumber, //crypto.randomUUID(),
     url: `src/photos/${postNumber}.jpg`,
     description: `${DESCRIPTION[descIndex]}`,
     likeAmount: Math.floor(Math.random() * 1000) + 100,

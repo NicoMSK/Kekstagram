@@ -3,11 +3,13 @@ import { ImageFilter } from "./ImageFilter";
 import { UsersImage } from "./UsersImage";
 import { UploadingNewImage } from "./UploadingNewImage";
 import { imageDescription } from "./constants";
+import { useState } from "react";
 
 export function MainBlock() {
   console.log(imageDescription);
   // const[currentImage, setCurrentImage] = useState()
-  // const[isModalOpen, setIsModalOpen] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
     <main>
       <ImageFilter />
@@ -20,21 +22,37 @@ export function MainBlock() {
         {imageDescription.map((item) => {
           return (
             <UsersImage
+              key={item.id}
               imgUrl={item.url}
               alt={item.description}
               commentsAmount={item.comments.length}
               likesAmount={item.likeAmount}
               onClick={() => {
-                console.log("получилось", item);
                 //   setCurrentImage(item)
-                // setIsModalOpen(true)
+                setIsModalOpen(true);
               }}
             />
           );
         })}
       </section>
       {/* <FullScreenImageDisplay currentImage={currentImage} isOpen={isModalOpen}/> */}
-      <FullScreenImageDisplay />
+      {imageDescription.map((item) => {
+        return (
+          <FullScreenImageDisplay
+            key={item.id}
+            isOpen={isModalOpen}
+            onClick={() => setIsModalOpen(false)}
+            imgUrl={item.url}
+            alt={item.description}
+            commentsAmount={item.comments.length}
+            svgUrl={""}
+            likesAmount={item.likeAmount}
+            avatarUrl={""}
+            avatarAlt={""}
+            commentDescription={""}
+          />
+        );
+      })}
     </main>
   );
 }

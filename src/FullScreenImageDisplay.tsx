@@ -1,22 +1,53 @@
+import { CommentItem } from "./CommentItem";
+
 {
   /* <!-- Полноэкранный показ изображения --> */
 }
 
-export function FullScreenImageDisplay() {
+type ScreenImageProp = {
+  isOpen: boolean;
+  imgUrl: string;
+  alt: string;
+  commentsAmount: number;
+  svgUrl: string;
+  likesAmount: number;
+  avatarUrl: string;
+  avatarAlt: string;
+  commentDescription: string;
+  onClick: () => void;
+};
+
+export function FullScreenImageDisplay(props: ScreenImageProp) {
+  const {
+    isOpen,
+    imgUrl,
+    alt,
+    svgUrl,
+    likesAmount,
+    commentsAmount,
+    avatarUrl,
+    avatarAlt,
+    commentDescription,
+    onClick,
+  } = props;
+
+  function showsNumberComments() {
+    if (commentsAmount <= 5) {
+      return commentsAmount;
+    } else {
+      return 5;
+    }
+  }
+
   return (
-    <section className="big-picture  overlay  hidden">
+    <section className={`big-picture  overlay  ${isOpen ? "" : "hidden"}`}>
       <h2 className="big-picture__title  visually-hidden">
         Просмотр фотографии
       </h2>
       <div className="big-picture__preview">
         {/* <!-- Просмотр изображения --> */}
         <div className="big-picture__img">
-          <img
-            src="./img/logo-background-3.jpg"
-            alt="Девушка в купальнике"
-            width="600"
-            height="600"
-          />
+          <img src={imgUrl} alt={alt} width="600" height="600" />
         </div>
 
         {/* <!-- Информация об изображении. Подпись, комментарии, количество лайков --> */}
@@ -24,46 +55,34 @@ export function FullScreenImageDisplay() {
           <div className="social__header">
             <img
               className="social__picture"
-              src="./img/avatar-1.svg"
-              alt="Аватар автора фотографии"
+              src={svgUrl}
+              alt={alt}
               width="35"
               height="35"
             />
-            <p className="social__caption">Тестим новую камеру! =)</p>
+            <p className="social__caption">{alt}</p>
             <p className="social__likes">
-              Нравится <span className="likes-count">356</span>
+              Нравится <span className="likes-count">{likesAmount}</span>
             </p>
           </div>
 
           {/* <!-- Комментарии к изображению --> */}
           <div className="social__comment-count">
-            <span className="social__comment-shown-count">5</span> из{" "}
-            <span className="social__comment-total-count">125</span>{" "}
+            <span className="social__comment-shown-count">
+              {showsNumberComments()}
+            </span>{" "}
+            из{" "}
+            <span className="social__comment-total-count">
+              {commentsAmount}
+            </span>{" "}
             комментариев
           </div>
           <ul className="social__comments">
-            <li className="social__comment">
-              <img
-                className="social__picture"
-                src="./img/avatar-4.svg"
-                alt="Аватар комментатора фотографии"
-                width="35"
-                height="35"
-              />
-              <p className="social__text">
-                Мега фото! Просто обалдеть. Как вам так удалось?
-              </p>
-            </li>
-            <li className="social__comment">
-              <img
-                className="social__picture"
-                src="./img/avatar-3.svg"
-                alt="Аватар комментатора фотографии"
-                width="35"
-                height="35"
-              />
-              <p className="social__text">Да это фотAшоп!!!!!!!!</p>
-            </li>
+            <CommentItem
+              avatarUrl={avatarUrl}
+              avatarAlt={avatarAlt}
+              commentDescription={commentDescription}
+            />
           </ul>
 
           {/* <!-- Кнопка для загрузки новой порции комментариев --> */}
@@ -78,8 +97,8 @@ export function FullScreenImageDisplay() {
           <div className="social__footer">
             <img
               className="social__picture"
-              src="./img/avatar-6.svg"
-              alt="Аватар комментатора фотографии"
+              src={avatarUrl}
+              alt={avatarAlt}
               width="35"
               height="35"
             />
@@ -99,6 +118,7 @@ export function FullScreenImageDisplay() {
           className="big-picture__cancel  cancel"
           type="reset"
           id="picture-cancel"
+          onClick={onClick}
         >
           Закрыть
         </button>
