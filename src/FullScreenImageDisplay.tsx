@@ -1,33 +1,50 @@
 import { CommentItem } from "./CommentItem";
+import { getCommentsArray, imageDescription } from "./constants";
 
 {
   /* <!-- Полноэкранный показ изображения --> */
 }
+type Comment = {
+  author: {
+    avatarImg: string;
+    name: string;
+  };
+  text: string;
+};
+
+type Post = {
+  id: number;
+  url: string;
+  avatarImg: string;
+  name: string;
+  description: string;
+  likeAmount: number;
+  comments: Comment[];
+};
 
 type ScreenImageProp = {
-  isOpen: boolean;
+  selectedPost: Post;
   imgUrl: string;
   alt: string;
   commentsAmount: number;
   svgUrl: string;
   likesAmount: number;
-  avatarUrl: string;
-  avatarAlt: string;
-  commentDescription: string;
+  avatarUrl?: string;
+  avatarAlt?: string;
+  commentDescription?: string;
+  nameAuthor: string;
   onClick: () => void;
 };
 
 export function FullScreenImageDisplay(props: ScreenImageProp) {
   const {
-    isOpen,
+    selectedPost,
     imgUrl,
     alt,
     svgUrl,
     likesAmount,
     commentsAmount,
-    avatarUrl,
-    avatarAlt,
-    commentDescription,
+    nameAuthor,
     onClick,
   } = props;
 
@@ -40,10 +57,7 @@ export function FullScreenImageDisplay(props: ScreenImageProp) {
   }
 
   return (
-    <section className={`big-picture  overlay  ${isOpen ? "" : "hidden"}`}>
-      <h2 className="big-picture__title  visually-hidden">
-        Просмотр фотографии
-      </h2>
+    <>
       <div className="big-picture__preview">
         {/* <!-- Просмотр изображения --> */}
         <div className="big-picture__img">
@@ -78,11 +92,18 @@ export function FullScreenImageDisplay(props: ScreenImageProp) {
             комментариев
           </div>
           <ul className="social__comments">
-            <CommentItem
-              avatarUrl={avatarUrl}
-              avatarAlt={avatarAlt}
-              commentDescription={commentDescription}
-            />
+            {selectedPost.comments
+              .slice(0, showsNumberComments())
+              .map((item, index) => {
+                return (
+                  <CommentItem
+                    key={index}
+                    avatarUrl={item.author.avatarImg}
+                    avatarAlt={item.text}
+                    commentDescription={item.text}
+                  />
+                );
+              })}
           </ul>
 
           {/* <!-- Кнопка для загрузки новой порции комментариев --> */}
@@ -97,8 +118,8 @@ export function FullScreenImageDisplay(props: ScreenImageProp) {
           <div className="social__footer">
             <img
               className="social__picture"
-              src={avatarUrl}
-              alt={avatarAlt}
+              src={svgUrl}
+              alt={nameAuthor}
               width="35"
               height="35"
             />
@@ -123,6 +144,6 @@ export function FullScreenImageDisplay(props: ScreenImageProp) {
           Закрыть
         </button>
       </div>
-    </section>
+    </>
   );
 }

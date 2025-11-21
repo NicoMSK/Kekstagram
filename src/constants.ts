@@ -45,27 +45,37 @@ function getRandomInteger(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
+export function getCommentsArray() {
+  const commentsAmount = getRandomInteger(MIN_COMMENT, MAX_COMMENT);
+
+  return Array.from({ length: commentsAmount }, () => {
+    const authorIndex = getRandomInteger(0, NAMES.length - 1);
+    const textIndex = getRandomInteger(0, TEXT_COMMENT.length - 1);
+    const avatarIndexComment = getRandomInteger(1, 6);
+
+    return {
+      author: {
+        avatarImg: `src/img/avatar-${avatarIndexComment}.svg`,
+        name: NAMES[authorIndex],
+      },
+      text: `${TEXT_COMMENT[textIndex]}`,
+    };
+  });
+}
+
 export const imageDescription = Array.from({ length: 25 }, (_, i) => {
   const postNumber = i + 1;
+  const authorIndex = getRandomInteger(0, NAMES.length - 1);
+  const avatarIndex = getRandomInteger(1, 6);
   const descIndex = getRandomInteger(0, DESCRIPTION.length - 1);
-  const commentsAmount = getRandomInteger(MIN_COMMENT, MAX_COMMENT);
 
   return {
     id: postNumber, //crypto.randomUUID(),
     url: `src/photos/${postNumber}.jpg`,
+    avatarImg: `src/img/avatar-${avatarIndex}.svg`,
+    name: NAMES[authorIndex],
     description: `${DESCRIPTION[descIndex]}`,
-    likeAmount: Math.floor(Math.random() * 1000) + 100,
-    comments: Array.from({ length: commentsAmount }, (_, j) => {
-      const authorIndex = j % NAMES.length;
-      const textIndex = getRandomInteger(0, TEXT_COMMENT.length - 1);
-
-      return {
-        author: {
-          avatarImg: `src/img/avatar-${authorIndex + 1}.svg`,
-          name: NAMES[authorIndex],
-        },
-        text: `${TEXT_COMMENT[textIndex]}`,
-      };
-    }),
+    likeAmount: Math.floor(Math.random() * 100) + 10,
+    comments: getCommentsArray(),
   };
 });

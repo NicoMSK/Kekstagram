@@ -6,9 +6,8 @@ import { imageDescription } from "./constants";
 import { useState } from "react";
 
 export function MainBlock() {
-  console.log(imageDescription);
-  // const[currentImage, setCurrentImage] = useState()
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedPost, setSelectedPost] = useState<Post | null>(null);
 
   return (
     <main>
@@ -28,31 +27,35 @@ export function MainBlock() {
               commentsAmount={item.comments.length}
               likesAmount={item.likeAmount}
               onClick={() => {
-                //   setCurrentImage(item)
+                setSelectedPost(item);
                 setIsModalOpen(true);
               }}
             />
           );
         })}
       </section>
-      {/* <FullScreenImageDisplay currentImage={currentImage} isOpen={isModalOpen}/> */}
-      {imageDescription.map((item) => {
-        return (
+      <section
+        className={`big-picture  overlay  ${isModalOpen ? "" : "hidden"}`}
+      >
+        <h2 className="big-picture__title  visually-hidden">
+          Просмотр фотографии
+        </h2>
+        {isModalOpen && selectedPost && (
           <FullScreenImageDisplay
-            key={item.id}
-            isOpen={isModalOpen}
-            onClick={() => setIsModalOpen(false)}
-            imgUrl={item.url}
-            alt={item.description}
-            commentsAmount={item.comments.length}
-            svgUrl={""}
-            likesAmount={item.likeAmount}
-            avatarUrl={""}
-            avatarAlt={""}
-            commentDescription={""}
+            selectedPost={selectedPost}
+            onClick={() => {
+              setIsModalOpen(false);
+              setSelectedPost(null);
+            }}
+            imgUrl={selectedPost.url}
+            alt={selectedPost.description}
+            commentsAmount={selectedPost.comments.length}
+            svgUrl={selectedPost.avatarImg}
+            likesAmount={selectedPost.likeAmount}
+            nameAuthor={selectedPost.name}
           />
-        );
-      })}
+        )}
+      </section>
     </main>
   );
 }
