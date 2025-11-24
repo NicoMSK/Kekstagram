@@ -1,5 +1,5 @@
 import { CommentItem } from "./CommentItem";
-import { getCommentsArray, imageDescription } from "./constants";
+import { useEscClose } from "./UseEscClose";
 
 {
   /* <!-- Полноэкранный показ изображения --> */
@@ -12,7 +12,7 @@ type Comment = {
   text: string;
 };
 
-type Post = {
+export type Post = {
   id: number;
   url: string;
   avatarImg: string;
@@ -33,7 +33,7 @@ type ScreenImageProp = {
   avatarAlt?: string;
   commentDescription?: string;
   nameAuthor: string;
-  onClick: () => void;
+  closeModalWindow: () => void;
 };
 
 export function FullScreenImageDisplay(props: ScreenImageProp) {
@@ -45,8 +45,10 @@ export function FullScreenImageDisplay(props: ScreenImageProp) {
     likesAmount,
     commentsAmount,
     nameAuthor,
-    onClick,
+    closeModalWindow,
   } = props;
+
+  useEscClose(closeModalWindow);
 
   function showsNumberComments() {
     if (commentsAmount <= 5) {
@@ -108,7 +110,9 @@ export function FullScreenImageDisplay(props: ScreenImageProp) {
 
           {/* <!-- Кнопка для загрузки новой порции комментариев --> */}
           <button
-            className="social__comments-loader  comments-loader"
+            className={`social__comments-loader  comments-loader ${
+              commentsAmount <= 5 ? "hidden" : ""
+            }`}
             type="button"
           >
             Загрузить еще
@@ -139,7 +143,7 @@ export function FullScreenImageDisplay(props: ScreenImageProp) {
           className="big-picture__cancel  cancel"
           type="reset"
           id="picture-cancel"
-          onClick={onClick}
+          onClick={closeModalWindow}
         >
           Закрыть
         </button>

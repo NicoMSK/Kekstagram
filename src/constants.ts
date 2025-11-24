@@ -40,6 +40,8 @@ export const TEXT_COMMENT = [
 
 const MIN_COMMENT = 3;
 const MAX_COMMENT = 25;
+const MIN_AVATAR = 1;
+const MAX_AVATAR = 6;
 
 function getRandomInteger(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1) + min);
@@ -66,7 +68,7 @@ export function getCommentsArray() {
 export const imageDescription = Array.from({ length: 25 }, (_, i) => {
   const postNumber = i + 1;
   const authorIndex = getRandomInteger(0, NAMES.length - 1);
-  const avatarIndex = getRandomInteger(1, 6);
+  const avatarIndex = getRandomInteger(MIN_AVATAR, MAX_AVATAR);
   const descIndex = getRandomInteger(0, DESCRIPTION.length - 1);
 
   return {

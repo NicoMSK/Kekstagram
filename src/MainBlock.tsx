@@ -1,9 +1,10 @@
-import { FullScreenImageDisplay } from "./FullScreenImageDisplay";
+import { FullScreenImageDisplay, type Post } from "./FullScreenImageDisplay";
 import { ImageFilter } from "./ImageFilter";
 import { UsersImage } from "./UsersImage";
 import { UploadingNewImage } from "./UploadingNewImage";
 import { imageDescription } from "./constants";
 import { useState } from "react";
+import { closeModal, openModal } from "./utils";
 
 export function MainBlock() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -28,7 +29,7 @@ export function MainBlock() {
               likesAmount={item.likeAmount}
               onClick={() => {
                 setSelectedPost(item);
-                setIsModalOpen(true);
+                openModal(setIsModalOpen);
               }}
             />
           );
@@ -36,6 +37,9 @@ export function MainBlock() {
       </section>
       <section
         className={`big-picture  overlay  ${isModalOpen ? "" : "hidden"}`}
+        onClick={(e) =>
+          e.currentTarget === e.target && closeModal(setIsModalOpen)
+        }
       >
         <h2 className="big-picture__title  visually-hidden">
           Просмотр фотографии
@@ -43,9 +47,8 @@ export function MainBlock() {
         {isModalOpen && selectedPost && (
           <FullScreenImageDisplay
             selectedPost={selectedPost}
-            onClick={() => {
-              setIsModalOpen(false);
-              setSelectedPost(null);
+            closeModalWindow={() => {
+              closeModal(setIsModalOpen);
             }}
             imgUrl={selectedPost.url}
             alt={selectedPost.description}

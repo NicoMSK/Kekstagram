@@ -7,8 +7,6 @@ import { useState } from "react";
 export function UploadingNewImage() {
   const [editImage, setEditImage] = useState(false);
 
-  ///создать util файл для этих функций
-
   // function openImageEditing() {
   //   document.body.classList.add("modal-open");
   //   setEditImage(true);
@@ -21,16 +19,6 @@ export function UploadingNewImage() {
 
   // function closeEditingWindowEsc(event: React.KeyboardEvent<HTMLInputElement>) {
   //   if (event.key === "Escape") {
-  //     closeEditingWindow();
-  //   }
-  // }
-  ///???
-  // function closeOnBackDropClick(event) {
-  //   const currentTarget = event.currentTarget;
-  //   const target = event.target;
-  //   const isClickedOnBackDrop = target === currentTarget;
-  //   if (isClickedOnBackDrop) {
-  //     console.log("click???");
   //     closeEditingWindow();
   //   }
   // }
@@ -98,7 +86,7 @@ export function UploadingNewImage() {
 
                 {/* <!-- Предварительный просмотр изображения --> */}
                 <div className="img-upload__preview">
-                  <img src="" alt="Предварительный просмотр фотографии" />
+                  <img src="#" alt="Предварительный просмотр фотографии" />
                 </div>
 
                 {/* <!-- Изменение глубины эффекта, накладываемого на изображение --> */}
