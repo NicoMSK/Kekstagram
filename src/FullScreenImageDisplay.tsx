@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { CommentItem } from "./CommentItem";
 import { useEscClose } from "./UseEscClose";
 
@@ -48,6 +49,9 @@ export function FullScreenImageDisplay(props: ScreenImageProp) {
     closeModalWindow,
   } = props;
 
+  const [likeCount, setLikeCount] = useState(likesAmount);
+  const [likeActive, setLikeActive] = useState(false);
+
   useEscClose(closeModalWindow);
 
   function showsNumberComments() {
@@ -56,6 +60,12 @@ export function FullScreenImageDisplay(props: ScreenImageProp) {
     } else {
       return 5;
     }
+  }
+
+  function likesCounter() {
+    const newLike = likesAmount + 1;
+    setLikeActive(true);
+    return setLikeCount(newLike);
   }
 
   return (
@@ -78,7 +88,13 @@ export function FullScreenImageDisplay(props: ScreenImageProp) {
             />
             <p className="social__caption">{alt}</p>
             <p className="social__likes">
-              Нравится <span className="likes-count">{likesAmount}</span>
+              Нравится{" "}
+              <span
+                className={`likes-count ${likeActive && "likes-count--active"}`}
+                onClick={likesCounter}
+              >
+                {likeCount}
+              </span>
             </p>
           </div>
 
