@@ -7,8 +7,35 @@ import { useState } from "react";
 import { closeModal, openModal } from "./utils";
 
 export function MainBlock() {
+  const [posts, setPosts] = useState(imageDescription);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
+
+  function addLikePost(id: number) {
+    setPosts((prev) =>
+      prev.map((post) => {
+        if (post.id !== id) return post;
+        if (post.likeChecked) return post;
+
+        return {
+          ...post,
+          likeAmount: post.likeAmount + 1,
+          likeChecked: true,
+        };
+      })
+    );
+
+    setSelectedPost((prev) => {
+      if (!prev || prev.id !== id) return prev;
+      if (prev.likeChecked) return prev;
+
+      return {
+        ...prev,
+        likeAmount: prev.likeAmount + 1,
+        likeChecked: true,
+      };
+    });
+  }
 
   return (
     <main>
@@ -19,7 +46,7 @@ export function MainBlock() {
           Фотографии других пользователей
         </h2>
         <UploadingNewImage />
-        {imageDescription.map((item) => {
+        {posts.map((item) => {
           return (
             <UsersImage
               key={item.id}
@@ -36,7 +63,7 @@ export function MainBlock() {
         })}
       </section>
       <section
-        className={`big-picture  overlay  ${isModalOpen ? "" : "hidden"}`}
+        className={`big-picture  overlay  ${!isModalOpen && "hidden"}`}
         onClick={(e) =>
           e.currentTarget === e.target && closeModal(setIsModalOpen)
         }
@@ -55,6 +82,8 @@ export function MainBlock() {
             commentsAmount={selectedPost.comments.length}
             svgUrl={selectedPost.avatarImg}
             likesAmount={selectedPost.likeAmount}
+            likeChecked={selectedPost.likeChecked}
+            addLikePost={addLikePost}
             nameAuthor={selectedPost.name}
           />
         )}

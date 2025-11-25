@@ -96,7 +96,7 @@ export function UploadingNewImage() {
                     type="number"
                     step="any"
                     name="effect-level"
-                    value=""
+                    // value=""
                   />
                   <div className="effect-level__slider"></div>
                 </fieldset>
@@ -122,7 +122,7 @@ export function UploadingNewImage() {
                       name="effect"
                       id="effect-none"
                       value="none"
-                      checked
+                      // checked
                     />
                     <label className="effects__label" htmlFor="effect-none">
                       <span className="effects__preview  effects__preview--none">

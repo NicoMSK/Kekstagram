@@ -78,6 +78,7 @@ export const imageDescription = Array.from({ length: 25 }, (_, i) => {
     name: NAMES[authorIndex],
     description: `${DESCRIPTION[descIndex]}`,
     likeAmount: Math.floor(Math.random() * 100) + 10,
+    likeChecked: false,
     comments: getCommentsArray(),
   };
 });

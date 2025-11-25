@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { CommentItem } from "./CommentItem";
 import { useEscClose } from "./UseEscClose";
 
@@ -20,6 +19,7 @@ export type Post = {
   name: string;
   description: string;
   likeAmount: number;
+  likeChecked: boolean;
   comments: Comment[];
 };
 
@@ -33,8 +33,10 @@ type ScreenImageProp = {
   avatarUrl?: string;
   avatarAlt?: string;
   commentDescription?: string;
+  likeChecked: boolean;
   nameAuthor: string;
   closeModalWindow: () => void;
+  addLikePost: (id: number) => void;
 };
 
 export function FullScreenImageDisplay(props: ScreenImageProp) {
@@ -44,13 +46,12 @@ export function FullScreenImageDisplay(props: ScreenImageProp) {
     alt,
     svgUrl,
     likesAmount,
+    likeChecked,
     commentsAmount,
     nameAuthor,
     closeModalWindow,
+    addLikePost,
   } = props;
-
-  const [likeCount, setLikeCount] = useState(likesAmount);
-  const [likeActive, setLikeActive] = useState(false);
 
   useEscClose(closeModalWindow);
 
@@ -60,12 +61,6 @@ export function FullScreenImageDisplay(props: ScreenImageProp) {
     } else {
       return 5;
     }
-  }
-
-  function likesCounter() {
-    const newLike = likesAmount + 1;
-    setLikeActive(true);
-    return setLikeCount(newLike);
   }
 
   return (
@@ -90,10 +85,12 @@ export function FullScreenImageDisplay(props: ScreenImageProp) {
             <p className="social__likes">
               Нравится{" "}
               <span
-                className={`likes-count ${likeActive && "likes-count--active"}`}
-                onClick={likesCounter}
+                className={`likes-count ${
+                  likeChecked && "likes-count--active"
+                }`}
+                onClick={() => addLikePost(selectedPost.id)}
               >
-                {likeCount}
+                {likesAmount}
               </span>
             </p>
           </div>
