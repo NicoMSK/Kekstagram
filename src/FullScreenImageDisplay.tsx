@@ -1,22 +1,69 @@
+import { CommentItem } from "./CommentItem";
+import { useEscClose } from "./UseEscClose";
+
 {
   /* <!-- Полноэкранный показ изображения --> */
 }
+type Comment = {
+  author: {
+    avatarImg: string;
+    name: string;
+  };
+  text: string;
+};
 
-export function FullScreenImageDisplay() {
+export type Post = {
+  id: number;
+  url: string;
+  avatarImg: string;
+  name: string;
+  description: string;
+  likeAmount: number;
+  comments: Comment[];
+};
+
+type ScreenImageProp = {
+  selectedPost: Post;
+  imgUrl: string;
+  alt: string;
+  commentsAmount: number;
+  svgUrl: string;
+  likesAmount: number;
+  avatarUrl?: string;
+  avatarAlt?: string;
+  commentDescription?: string;
+  nameAuthor: string;
+  closeModalWindow: () => void;
+};
+
+export function FullScreenImageDisplay(props: ScreenImageProp) {
+  const {
+    selectedPost,
+    imgUrl,
+    alt,
+    svgUrl,
+    likesAmount,
+    commentsAmount,
+    nameAuthor,
+    closeModalWindow,
+  } = props;
+
+  useEscClose(closeModalWindow);
+
+  function showsNumberComments() {
+    if (commentsAmount <= 5) {
+      return commentsAmount;
+    } else {
+      return 5;
+    }
+  }
+
   return (
-    <section className="big-picture  overlay  hidden">
-      <h2 className="big-picture__title  visually-hidden">
-        Просмотр фотографии
-      </h2>
+    <>
       <div className="big-picture__preview">
         {/* <!-- Просмотр изображения --> */}
         <div className="big-picture__img">
-          <img
-            src="./img/logo-background-3.jpg"
-            alt="Девушка в купальнике"
-            width="600"
-            height="600"
-          />
+          <img src={imgUrl} alt={alt} width="600" height="600" />
         </div>
 
         {/* <!-- Информация об изображении. Подпись, комментарии, количество лайков --> */}
@@ -24,51 +71,48 @@ export function FullScreenImageDisplay() {
           <div className="social__header">
             <img
               className="social__picture"
-              src="./img/avatar-1.svg"
-              alt="Аватар автора фотографии"
+              src={svgUrl}
+              alt={alt}
               width="35"
               height="35"
             />
-            <p className="social__caption">Тестим новую камеру! =)</p>
+            <p className="social__caption">{alt}</p>
             <p className="social__likes">
-              Нравится <span className="likes-count">356</span>
+              Нравится <span className="likes-count">{likesAmount}</span>
             </p>
           </div>
 
           {/* <!-- Комментарии к изображению --> */}
           <div className="social__comment-count">
-            <span className="social__comment-shown-count">5</span> из{" "}
-            <span className="social__comment-total-count">125</span>{" "}
+            <span className="social__comment-shown-count">
+              {showsNumberComments()}
+            </span>{" "}
+            из{" "}
+            <span className="social__comment-total-count">
+              {commentsAmount}
+            </span>{" "}
             комментариев
           </div>
           <ul className="social__comments">
-            <li className="social__comment">
-              <img
-                className="social__picture"
-                src="./img/avatar-4.svg"
-                alt="Аватар комментатора фотографии"
-                width="35"
-                height="35"
-              />
-              <p className="social__text">
-                Мега фото! Просто обалдеть. Как вам так удалось?
-              </p>
-            </li>
-            <li className="social__comment">
-              <img
-                className="social__picture"
-                src="./img/avatar-3.svg"
-                alt="Аватар комментатора фотографии"
-                width="35"
-                height="35"
-              />
-              <p className="social__text">Да это фотAшоп!!!!!!!!</p>
-            </li>
+            {selectedPost.comments
+              .slice(0, showsNumberComments())
+              .map((item, index) => {
+                return (
+                  <CommentItem
+                    key={index}
+                    avatarUrl={item.author.avatarImg}
+                    avatarAlt={item.text}
+                    commentDescription={item.text}
+                  />
+                );
+              })}
           </ul>
 
           {/* <!-- Кнопка для загрузки новой порции комментариев --> */}
           <button
-            className="social__comments-loader  comments-loader"
+            className={`social__comments-loader  comments-loader ${
+              commentsAmount <= 5 ? "hidden" : ""
+            }`}
             type="button"
           >
             Загрузить еще
@@ -78,8 +122,8 @@ export function FullScreenImageDisplay() {
           <div className="social__footer">
             <img
               className="social__picture"
-              src="./img/avatar-6.svg"
-              alt="Аватар комментатора фотографии"
+              src={svgUrl}
+              alt={nameAuthor}
               width="35"
               height="35"
             />
@@ -99,10 +143,11 @@ export function FullScreenImageDisplay() {
           className="big-picture__cancel  cancel"
           type="reset"
           id="picture-cancel"
+          onClick={closeModalWindow}
         >
           Закрыть
         </button>
       </div>
-    </section>
+    </>
   );
 }

@@ -1,8 +1,28 @@
+import { useState } from "react";
+
 {
   /* <!-- Поле для загрузки нового изображения на сайт --> */
 }
 
 export function UploadingNewImage() {
+  const [editImage, setEditImage] = useState(false);
+
+  // function openImageEditing() {
+  //   document.body.classList.add("modal-open");
+  //   setEditImage(true);
+  // }
+
+  function closeEditingWindow() {
+    document.body.classList.remove("modal-open");
+    setEditImage(false);
+  }
+
+  // function closeEditingWindowEsc(event: React.KeyboardEvent<HTMLInputElement>) {
+  //   if (event.key === "Escape") {
+  //     closeEditingWindow();
+  //   }
+  // }
+
   return (
     <section className="img-upload">
       <div className="img-upload__wrapper">
@@ -22,6 +42,11 @@ export function UploadingNewImage() {
               id="upload-file"
               name="filename"
               required
+              // onChange={
+              //   // closeOnBackDropClick(e);
+              //   openImageEditing();
+              // }
+              // onKeyDown={closeEditingWindowEsc}
             />
             <label
               className="img-upload__label  img-upload__control"
@@ -32,7 +57,7 @@ export function UploadingNewImage() {
           </fieldset>
 
           {/* <!-- Форма редактирования изображения --> */}
-          <div className="img-upload__overlay  hidden">
+          <div className={`img-upload__overlay  ${editImage ? "" : "hidden"}`}>
             <div className="img-upload__wrapper">
               <div className="img-upload__preview-container">
                 {/* <!-- Изменение размера изображения --> */}
@@ -61,10 +86,7 @@ export function UploadingNewImage() {
 
                 {/* <!-- Предварительный просмотр изображения --> */}
                 <div className="img-upload__preview">
-                  <img
-                    src="./img/upload-default-image.jpg"
-                    alt="Предварительный просмотр фотографии"
-                  />
+                  <img src="#" alt="Предварительный просмотр фотографии" />
                 </div>
 
                 {/* <!-- Изменение глубины эффекта, накладываемого на изображение --> */}
@@ -84,6 +106,7 @@ export function UploadingNewImage() {
                   className="img-upload__cancel  cancel"
                   type="reset"
                   id="upload-cancel"
+                  onClick={closeEditingWindow}
                 >
                   Закрыть
                 </button>
