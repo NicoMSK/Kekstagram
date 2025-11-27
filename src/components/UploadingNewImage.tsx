@@ -1,9 +1,5 @@
 import { useState } from "react";
 
-{
-  /* <!-- Поле для загрузки нового изображения на сайт --> */
-}
-
 export function UploadingNewImage() {
   const [editImage, setEditImage] = useState(false);
 
@@ -34,7 +30,6 @@ export function UploadingNewImage() {
           id="upload-select-image"
           autoComplete="off"
         >
-          {/* <!-- Изначальное состояние поля для загрузки изображения --> */}
           <fieldset className="img-upload__start">
             <input
               className="img-upload__input  visually-hidden"
@@ -55,12 +50,9 @@ export function UploadingNewImage() {
               Загрузить
             </label>
           </fieldset>
-
-          {/* <!-- Форма редактирования изображения --> */}
           <div className={`img-upload__overlay  ${editImage ? "" : "hidden"}`}>
             <div className="img-upload__wrapper">
               <div className="img-upload__preview-container">
-                {/* <!-- Изменение размера изображения --> */}
                 <fieldset className="img-upload__scale  scale">
                   <button
                     className="scale__control  scale__control--smaller"
@@ -83,13 +75,9 @@ export function UploadingNewImage() {
                     Увеличить
                   </button>
                 </fieldset>
-
-                {/* <!-- Предварительный просмотр изображения --> */}
                 <div className="img-upload__preview">
                   <img src="#" alt="Предварительный просмотр фотографии" />
                 </div>
-
-                {/* <!-- Изменение глубины эффекта, накладываемого на изображение --> */}
                 <fieldset className="img-upload__effect-level  effect-level">
                   <input
                     className="effect-level__value"
@@ -100,8 +88,6 @@ export function UploadingNewImage() {
                   />
                   <div className="effect-level__slider"></div>
                 </fieldset>
-
-                {/* <!-- Кнопка для закрытия формы редактирования изображения --> */}
                 <button
                   className="img-upload__cancel  cancel"
                   type="reset"
@@ -111,8 +97,6 @@ export function UploadingNewImage() {
                   Закрыть
                 </button>
               </div>
-
-              {/* <!-- Наложение эффекта на изображение --> */}
               <fieldset className="img-upload__effects  effects">
                 <ul className="effects__list">
                   <li className="effects__item">
@@ -208,8 +192,6 @@ export function UploadingNewImage() {
                   </li>
                 </ul>
               </fieldset>
-
-              {/* <!-- Добавление хэштегов и комментария к изображению --> */}
               <fieldset className="img-upload__text text">
                 <div className="img-upload__field-wrapper">
                   <input
@@ -226,8 +208,6 @@ export function UploadingNewImage() {
                   ></textarea>
                 </div>
               </fieldset>
-
-              {/* <!-- Кнопка для отправки данных на сервер --> */}
               <button
                 className="img-upload__submit"
                 type="submit"

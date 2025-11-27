@@ -1,8 +1,4 @@
-{
-  /* <!-- Сообщение с ошибкой загрузки изображения --> */
-}
-
-export function ImageLoadingErrorTemplate() {
+export function ImageLoadingError() {
   return (
     <section className="error">
       <div className="error__inner">

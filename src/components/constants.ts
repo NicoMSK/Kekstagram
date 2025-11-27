@@ -53,7 +53,7 @@ export function getCommentsArray() {
   return Array.from({ length: commentsAmount }, () => {
     const authorIndex = getRandomInteger(0, NAMES.length - 1);
     const textIndex = getRandomInteger(0, TEXT_COMMENT.length - 1);
-    const avatarIndexComment = getRandomInteger(1, 6);
+    const avatarIndexComment = getRandomInteger(MIN_AVATAR, MAX_AVATAR);
 
     return {
       author: {

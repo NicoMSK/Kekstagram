@@ -1,10 +1,11 @@
-import { FullScreenImageDisplay, type Post } from "./FullScreenImageDisplay";
+import { FullScreenImageDisplay } from "./FullScreenImageDisplay";
 import { ImageFilter } from "./ImageFilter";
 import { UsersImage } from "./UsersImage";
 import { UploadingNewImage } from "./UploadingNewImage";
 import { imageDescription } from "./constants";
 import { useState } from "react";
 import { closeModal, openModal } from "./utils";
+import type { Post } from "./type";
 
 export function MainBlock() {
   const [posts, setPosts] = useState(imageDescription);
@@ -40,7 +41,6 @@ export function MainBlock() {
   return (
     <main>
       <ImageFilter />
-      {/* <!-- Контейнер для изображений от других пользователей --> */}
       <section className="pictures  container">
         <h2 className="pictures__title  visually-hidden">
           Фотографии других пользователей
@@ -71,10 +71,10 @@ export function MainBlock() {
         <h2 className="big-picture__title  visually-hidden">
           Просмотр фотографии
         </h2>
-        {isModalOpen && selectedPost && (
+        {selectedPost && (
           <FullScreenImageDisplay
             selectedPost={selectedPost}
-            closeModalWindow={() => {
+            onCloseModalWindow={() => {
               closeModal(setIsModalOpen);
             }}
             imgUrl={selectedPost.url}

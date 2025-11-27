@@ -1,7 +1,4 @@
-{
-  /* <!-- Сообщение об успешной загрузке изображения --> */
-}
-export function TemplateSuccessfulImageUpload() {
+export function SuccessfulImageUpload() {
   return (
     <section className="success">
       <div className="success__inner">

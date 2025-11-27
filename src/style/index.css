@@ -1,10 +1,7 @@
-/* Общие стили. Каркас
-   ========================================================================== */
-
 @font-face {
   font-family: "Open Sans";
-  src: url("./fonts/OpenSansCondensed-Bold.woff2") format("woff2"),
-    url("./fonts/OpenSansCondensed-Bold.woff") format("woff");
+  src: url("../fonts/OpenSansCondensed-Bold.woff2") format("woff2"),
+    url("../fonts/OpenSansCondensed-Bold.woff") format("woff");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -12,8 +9,8 @@
 
 @font-face {
   font-family: "Open Sans";
-  src: url("./fonts/OpenSans-Regular.woff2") format("woff2"),
-    url("./fonts/OpenSans-Regular.woff") format("woff");
+  src: url("../fonts/OpenSans-Regular.woff2") format("woff2"),
+    url("../fonts/OpenSans-Regular.woff") format("woff");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -56,11 +53,6 @@ main {
   overflow: hidden;
 }
 
-
-/**
- * Кнопка закрытия модального окна
- */
-
 .cancel {
   display: block;
   margin: 0;
@@ -72,7 +64,7 @@ main {
   font-size: 0;
 
   background-color: rgba(255, 255, 255, 0.2);
-  background-image: url("./img/icon-cross.svg");
+  background-image: url("../img/icon-cross.svg");
   background-position: center;
   background-repeat: no-repeat;
 
@@ -94,11 +86,6 @@ main {
   transform: translateY(1px);
 }
 
-
-/**
- * Оверлей под экранами
- */
-
 .overlay {
   position: fixed;
   top: 0;
@@ -115,10 +102,6 @@ main {
 
   background-color: rgba(0, 0, 0, 0.8);
 }
-
-
-/* Блок с фильтрами изображений других пользователей
-   ========================================================================== */
 
 .img-filters {
   padding: 20px 0;
@@ -180,10 +163,6 @@ main {
   background-color: #ffffff;
   border-radius: 2px;
 }
-
-
-/* Блок, в котором размещаются фотографии других пользователей
-   ========================================================================== */
 
 .pictures {
   display: -ms-grid;
@@ -250,7 +229,7 @@ main {
   left: 5px;
   top: -7px;
 
-  background-image: url("./img/sprite.png");
+  background-image: url("../img/sprite.png");
   background-repeat: no-repeat;
 }
 
@@ -267,10 +246,6 @@ main {
 
   background-position: -5px -31px;
 }
-
-
-/* Поле для загрузки нового изображения
-   ========================================================================== */
 
 .img-upload {
   -ms-grid-column: 3;
@@ -295,7 +270,7 @@ main {
   min-height: 569px;
 
   background-color: #eed21e;
-  background-image: url("./img/logo-background-1.jpg");
+  background-image: url("../img/logo-background-1.jpg");
   background-repeat: no-repeat;
   background-position: center;
 
@@ -309,7 +284,7 @@ main {
   padding: 0;
   min-height: 569px;
 
-  background-image: url("./img/logo-mask.png");
+  background-image: url("../img/logo-mask.png");
   background-repeat: no-repeat;
   background-position: center;
 
@@ -327,7 +302,7 @@ main {
 
   font-size: 0;
 
-  background-image: url("./img/upload-button-bg.png");
+  background-image: url("../img/upload-button-bg.png");
   background-repeat: no-repeat;
   background-position: center;
 
@@ -344,7 +319,7 @@ main {
   width: 86px;
   height: 114px;
 
-  background-image: url("./img/upload-button.svg");
+  background-image: url("../img/upload-button.svg");
   background-repeat: no-repeat;
   background-position: center;
 
@@ -365,10 +340,6 @@ main {
 .img-upload__input:focus + .img-upload__label {
   outline: auto 5px highlight;
 }
-
-
-/* Окно для редактирования изображения
-   ========================================================================== */
 
 .img-upload__overlay {
   position: fixed;
@@ -392,11 +363,6 @@ main {
   position: relative;
   margin-bottom: 30px;
 }
-
-
-/**
- * Кнопки изменения масштаба изобраения
- */
 
 .img-upload__scale {
   position: absolute;
@@ -494,11 +460,6 @@ main {
   transform: translate(-50%, -50%);
 }
 
-
-/**
- * Превью изображения
- */
-
 .img-upload__preview {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -521,11 +482,6 @@ main {
   max-width: 600px;
   max-height: 600px;
 }
-
-
-/**
- * Шкала регулирования глубины фильтра
- */
 
 .effect-level {
   position: absolute;
@@ -565,11 +521,6 @@ main {
 .effect-level__value {
   display: none;
 }
-
-
-/**
- * Блок с эффектами, которые можно применить к изображению
- */
 
 .effects {
   margin: 0;
@@ -622,7 +573,7 @@ main {
   font-size: 0;
 
   background-color: #314359;
-  background-image: url("./img/upload-default-image.jpg");
+  background-image: url("../img/upload-default-image.jpg");
   background-repeat: no-repeat;
   background-position: center;
   background-size: 100% auto;
@@ -667,11 +618,6 @@ main {
   -webkit-filter: brightness(3);
   filter: brightness(3);
 }
-
-
-/**
- * Блок добавления хэштегов и комментария к изображению
- */
 
 .text {
   margin: 0;
@@ -719,11 +665,6 @@ main {
   position: relative;
 }
 
-
-/**
- * Кнопка для отправки изображения
- */
-
 .img-upload__submit {
   padding: 10px 20px;
 
@@ -755,11 +696,6 @@ main {
   opacity: 0.3;
 }
 
-
-/*
- * Кнопка для закрытия окна редактирования изображения
- */
-
 .img-upload__cancel {
   position: absolute;
   top: 0;
@@ -771,10 +707,6 @@ main {
   -ms-transform: translateY(1px);
   transform: translateY(1px);
 }
-
-
-/* Окно полноэкранного просмотра изображения
-   ========================================================================== */
 
 .big-picture__preview {
   position: absolute;
@@ -814,11 +746,6 @@ main {
 
   background-color: #ffffff;
 }
-
-
-/*
- * Подпись к изображению
- */
 
 .social__header {
   padding: 15px 15px;
@@ -879,7 +806,7 @@ main {
   width: 20px;
   height: 18px;
 
-  background-image: url("./img/sprite.png");
+  background-image: url("../img/sprite.png");
   background-repeat: no-repeat;
 
   background-position: -5px -56px;
@@ -896,11 +823,6 @@ main {
   opacity: 1;
   background-position: -5px -81px;
 }
-
-
-/*
- * Комментарии к изображению
- */
 
 .social__comments {
   -ms-flex-preferred-size: 100%;
@@ -957,11 +879,6 @@ main {
   margin: 0;
 }
 
-
-/**
- * Спиннер загрузки комментариев и его анимация
- */
-
 .spinner::after,
 .comments-loader:active::after {
   content: "";
@@ -1016,11 +933,6 @@ main {
   }
 }
 
-
-/*
- * Форма для отправки комментария
- */
-
 .social__footer {
   border-top: 1px solid #cccccc;
 }
@@ -1065,7 +977,7 @@ main {
 
   font-size: 0;
 
-  background-image: url("./img/sprite.png");
+  background-image: url("../img/sprite.png");
   background-repeat: no-repeat;
   background-position: -5px -106px;
 
@@ -1089,10 +1001,6 @@ main {
   background-position: -5px -149px;
 }
 
-
-/* Подвал сайта
-   ========================================================================== */
-
 .page-footer {
   margin-top: 30px;
   padding-top: 30px;
@@ -1112,11 +1020,6 @@ main {
   -ms-flex-pack: justify;
   justify-content: space-between;
 }
-
-
-/*
- * Копирайт Академии
- */
 
 .copyright {
   font-size: 12px;
@@ -1140,11 +1043,6 @@ main {
   background-color: inherit;
 }
 
-
-/*
- * Ссылки на социальные сети
- */
-
 .contacts {
   margin: 0;
   padding: 0;
@@ -1164,7 +1062,7 @@ main {
 
   font-size: 0;
 
-  background-image: url("./img/sprite.png");
+  background-image: url("../img/sprite.png");
   background-repeat: no-repeat;
 
   opacity: 0.6;
@@ -1183,10 +1081,6 @@ main {
 .contacts__link--vk {
   background-position: -5px -309px;
 }
-
-
-/* Экраны с сообщениями для пользователя
-   ========================================================================== */
 
 .img-upload__message {
   position: absolute;
@@ -1208,11 +1102,6 @@ main {
   background-color: #3c3614;
   transform: translateX(-50%);
 }
-
-
-/**
- * Экраны ошибки и успеха загрузки изображения
- */
 
 .error,
 .success {
@@ -1284,7 +1173,7 @@ main {
   top: -100px;
   left: 50%;
 
-  background-image: url("./img/icon-warning.svg");
+  background-image: url("../img/icon-warning.svg");
 
   -webkit-transform: translateX(-50%);
   -ms-transform: translateX(-50%);
@@ -1314,11 +1203,6 @@ main {
 .success__button:active {
   opacity: 0.6;
 }
-
-
-/**
- * Экран загрузки изображения
- */
 
 .img-upload__message--loading::before {
   content: "";
@@ -1363,10 +1247,6 @@ main {
   text-align: center;
   background-color: #fd4d4b;
 }
-
-
-/* Адаптивности чуток
-   ========================================================================== */
 
 @media (min-width: 1024px) {
   .img-upload__wrapper {
