@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { CommentItem } from "./CommentItem";
 import type { Post } from "./type";
 import { useEscClose } from "./useEscClose";
@@ -18,6 +19,8 @@ type ScreenImageProp = {
   addLikePost: (id: number) => void;
 };
 
+let arrayForUploadedComments = [];
+
 export function FullScreenImageDisplay(props: ScreenImageProp) {
   const {
     selectedPost,
@@ -32,10 +35,67 @@ export function FullScreenImageDisplay(props: ScreenImageProp) {
     addLikePost,
   } = props;
 
-  useEscClose(onCloseModalWindow);
-
+  // function renderСomments(startComment: number, endComment: number) {
+  //   return (
+  //     selectedPost.comments
+  //       // .slice(0, commentsAmountNormalized)
+  //       .slice(startComment, endComment)
+  //       .map((comment, index) => {
+  //         return (
+  //           <CommentItem
+  //             key={index}
+  //             author={comment.author}
+  //             text={comment.text}
+  //           />
+  //         );
+  //       })
+  //   );
+  // }
+  console.log(commentsAmount);
+  const nextLoadComments = commentsAmount <= 5 ? commentsAmount : 5;
   const commentsAmountNormalized = commentsAmount <= 5 ? commentsAmount : 5;
-  const isShowLoader = commentsAmount <= 5 ? "hidden" : "";
+  const [commentToShow, setCommentToShow] = useState([]);
+  const [nextComment, setNextComment] = useState(commentsAmountNormalized);
+  const isShowLoader =
+    commentsAmount <= 5 || commentsAmount <= nextComment ? "hidden" : "";
+
+  function renderСomments(startComment: number, endComment: number) {
+    const slicedComments = selectedPost.comments
+      .slice(startComment, endComment)
+      .map((comment) => {
+        return (
+          <CommentItem
+            key={crypto.randomUUID()}
+            author={comment.author}
+            text={comment.text}
+          />
+        );
+      });
+
+    arrayForUploadedComments = [...arrayForUploadedComments, ...slicedComments];
+    console.log(slicedComments);
+    // const totalArray = arrayForUploadedComments.map((comment) => {
+    //   return (
+    //     <CommentItem
+    //       key={crypto.randomUUID()}
+    //       author={comment.author}
+    //       text={comment.text}
+    //     />
+    //   );
+    // });
+    setCommentToShow(arrayForUploadedComments);
+  }
+
+  useEffect(() => {
+    renderСomments(0, commentsAmountNormalized);
+  }, []);
+
+  const handleShowMorePosts = () => {
+    renderСomments(nextComment, nextComment + nextLoadComments);
+    setNextComment(nextComment + nextLoadComments);
+  };
+
+  useEscClose(onCloseModalWindow);
 
   return (
     <>
@@ -66,34 +126,21 @@ export function FullScreenImageDisplay(props: ScreenImageProp) {
             </p>
           </div>
           <div className="social__comment-count">
-            <span className="social__comment-shown-count">
-              {commentsAmountNormalized}
-            </span>{" "}
+            <span className="social__comment-shown-count">{nextComment}</span>{" "}
             из{" "}
             <span className="social__comment-total-count">
               {commentsAmount}
             </span>{" "}
             комментариев
           </div>
-          <ul className="social__comments">
-            {selectedPost.comments
-              .slice(0, commentsAmountNormalized)
-              .map((comment, index) => {
-                return (
-                  <CommentItem
-                    key={index}
-                    author={comment.author}
-                    text={comment.text}
-                  />
-                );
-              })}
-          </ul>
+          <ul className="social__comments">{commentToShow}</ul>
           <button
             className={`social__comments-loader  comments-loader 
               ${isShowLoader}`}
             type="button"
+            onClick={handleShowMorePosts}
           >
-            Загрузить еще
+            Загрузить еще...
           </button>
           <div className="social__footer">
             <img
