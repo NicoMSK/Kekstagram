@@ -1,7 +1,3 @@
-{
-  /* <!-- Шаблон изображения случайного пользователя --> */
-}
-
 type UsersImageProps = {
   imgUrl: string;
   alt: string;

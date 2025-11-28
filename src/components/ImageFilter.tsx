@@ -1,7 +1,3 @@
-{
-  /* <!-- Фильтрация изображений от других пользователей --> */
-}
-
 export function ImageFilter() {
   return (
     <section className="img-filters  img-filters--inactive  container">
