@@ -14,28 +14,16 @@ export function MainBlock() {
 
   function addLikePost(id: number) {
     setPosts((prev) =>
-      prev.map((post) => {
-        if (post.id !== id) return post;
+      prev.filter((post) => {
         if (post.likeChecked) return post;
 
-        return {
-          ...post,
-          likeAmount: post.likeAmount + 1,
-          likeChecked: true,
-        };
+        if (post.id === id) {
+          post.likeAmount += 1;
+          post.likeChecked = true;
+        }
+        return post;
       })
     );
-
-    setSelectedPost((prev) => {
-      if (!prev || prev.id !== id) return prev;
-      if (prev.likeChecked) return prev;
-
-      return {
-        ...prev,
-        likeAmount: prev.likeAmount + 1,
-        likeChecked: true,
-      };
-    });
   }
 
   return (
