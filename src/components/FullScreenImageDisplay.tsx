@@ -51,8 +51,7 @@ export function FullScreenImageDisplay(props: ScreenImageProp) {
   //       })
   //   );
   // }
-  console.log(commentsAmount);
-  const nextLoadComments = commentsAmount <= 5 ? commentsAmount : 5;
+
   const commentsAmountNormalized = commentsAmount <= 5 ? commentsAmount : 5;
   const [commentToShow, setCommentToShow] = useState([]);
   const [nextComment, setNextComment] = useState(commentsAmountNormalized);
@@ -73,16 +72,7 @@ export function FullScreenImageDisplay(props: ScreenImageProp) {
       });
 
     arrayForUploadedComments = [...arrayForUploadedComments, ...slicedComments];
-    console.log(slicedComments);
-    // const totalArray = arrayForUploadedComments.map((comment) => {
-    //   return (
-    //     <CommentItem
-    //       key={crypto.randomUUID()}
-    //       author={comment.author}
-    //       text={comment.text}
-    //     />
-    //   );
-    // });
+
     setCommentToShow(arrayForUploadedComments);
   }
 
@@ -91,6 +81,9 @@ export function FullScreenImageDisplay(props: ScreenImageProp) {
   }, []);
 
   const handleShowMorePosts = () => {
+    const remaining = commentsAmount - nextComment;
+    const nextLoadComments = remaining >= 5 ? 5 : remaining;
+
     renderСomments(nextComment, nextComment + nextLoadComments);
     setNextComment(nextComment + nextLoadComments);
   };
