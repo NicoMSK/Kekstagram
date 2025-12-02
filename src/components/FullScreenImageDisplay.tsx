@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CommentItem } from "./CommentItem";
 import type { Post } from "./type";
 import { useEscClose } from "./useEscClose";
@@ -19,8 +19,6 @@ type ScreenImageProp = {
   addLikePost: (id: number) => void;
 };
 
-let arrayForUploadedComments = [];
-
 export function FullScreenImageDisplay(props: ScreenImageProp) {
   const {
     selectedPost,
@@ -35,28 +33,14 @@ export function FullScreenImageDisplay(props: ScreenImageProp) {
     addLikePost,
   } = props;
 
-  // function renderСomments(startComment: number, endComment: number) {
-  //   return (
-  //     selectedPost.comments
-  //       // .slice(0, commentsAmountNormalized)
-  //       .slice(startComment, endComment)
-  //       .map((comment, index) => {
-  //         return (
-  //           <CommentItem
-  //             key={index}
-  //             author={comment.author}
-  //             text={comment.text}
-  //           />
-  //         );
-  //       })
-  //   );
-  // }
-
   const commentsAmountNormalized = commentsAmount <= 5 ? commentsAmount : 5;
-  const [commentToShow, setCommentToShow] = useState([]);
-  const [nextComment, setNextComment] = useState(commentsAmountNormalized);
+  const [commentToShow, setCommentToShow] = useState<React.ReactElement[]>([]);
+  const [nextComment, setNextComment] = useState<number>(
+    commentsAmountNormalized
+  );
   const isShowLoader =
     commentsAmount <= 5 || commentsAmount <= nextComment ? "hidden" : "";
+  const arrayUploadedCommentsRef = useRef<React.ReactElement[]>([]);
 
   function renderСomments(startComment: number, endComment: number) {
     const slicedComments = selectedPost.comments
@@ -71,14 +55,20 @@ export function FullScreenImageDisplay(props: ScreenImageProp) {
         );
       });
 
-    arrayForUploadedComments = [...arrayForUploadedComments, ...slicedComments];
+    arrayUploadedCommentsRef.current = [
+      ...arrayUploadedCommentsRef.current,
+      ...slicedComments,
+    ];
 
-    setCommentToShow(arrayForUploadedComments);
+    setCommentToShow(arrayUploadedCommentsRef.current);
   }
 
   useEffect(() => {
+    arrayUploadedCommentsRef.current = [];
+
+    setNextComment(commentsAmountNormalized);
     renderСomments(0, commentsAmountNormalized);
-  }, []);
+  }, [selectedPost.id]);
 
   const handleShowMorePosts = () => {
     const remaining = commentsAmount - nextComment;
