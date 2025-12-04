@@ -2,26 +2,29 @@ import { FullScreenImageDisplay } from "./FullScreenImageDisplay";
 import { ImageFilter } from "./ImageFilter";
 import { UsersImage } from "./UsersImage";
 import { UploadingNewImage } from "./UploadingNewImage";
-import { imageDescription } from "./constants";
+import { imageDescriptions } from "./constants";
 import { useState } from "react";
 import { closeModal, openModal } from "./utils";
-import type { Post } from "./type";
 
 export function MainBlock() {
-  const [posts, setPosts] = useState(imageDescription);
+  const [posts, setPosts] = useState(imageDescriptions);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedPost, setSelectedPost] = useState<Post | null>(null);
+  const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
 
-  function addLikePost(id: number) {
+  const selectedPost = posts.find((post) => post.id === selectedPostId);
+
+  function addLikePost(id: string) {
     setPosts((prev) =>
-      prev.filter((post) => {
-        if (post.likeChecked) return post;
-
-        if (post.id === id) {
-          post.likeAmount += 1;
-          post.likeChecked = true;
+      prev.map((post) => {
+        if (post.id === id && !post.likeChecked) {
+          return {
+            ...post,
+            likeAmount: post.likeAmount + 1,
+            likeChecked: true,
+          };
         }
-        return post;
+
+        return { ...post };
       })
     );
   }
@@ -43,7 +46,7 @@ export function MainBlock() {
               commentsAmount={item.comments.length}
               likesAmount={item.likeAmount}
               onClick={() => {
-                setSelectedPost(item);
+                setSelectedPostId(item.id);
                 openModal(setIsModalOpen);
               }}
             />

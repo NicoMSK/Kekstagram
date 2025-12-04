@@ -16,7 +16,7 @@ type ScreenImageProp = {
   likeChecked: boolean;
   nameAuthor: string;
   onCloseModalWindow: () => void;
-  addLikePost: (id: number) => void;
+  addLikePost: (id: string) => void;
 };
 
 export function FullScreenImageDisplay(props: ScreenImageProp) {
@@ -38,8 +38,7 @@ export function FullScreenImageDisplay(props: ScreenImageProp) {
   const [nextComment, setNextComment] = useState<number>(
     commentsAmountNormalized
   );
-  const isShowLoader =
-    commentsAmount <= 5 || commentsAmount <= nextComment ? "hidden" : "";
+  const canUploadMore = commentsAmount <= 5 || commentsAmount <= nextComment;
   const arrayUploadedCommentsRef = useRef<React.ReactElement[]>([]);
 
   function renderСomments(startComment: number, endComment: number) {
@@ -48,9 +47,11 @@ export function FullScreenImageDisplay(props: ScreenImageProp) {
       .map((comment) => {
         return (
           <CommentItem
-            key={crypto.randomUUID()}
+            key={comment.id}
+            id={comment.id}
             author={comment.author}
             text={comment.text}
+            // comment={comment}
           />
         );
       });
@@ -62,6 +63,21 @@ export function FullScreenImageDisplay(props: ScreenImageProp) {
 
     setCommentToShow(arrayUploadedCommentsRef.current);
   }
+  //   const [curShownCommentsAmount, setCurShownCommentsAmount] = useState(Math.min(commentsAmount, 5)
+
+  // const onShowNextCommentClick = () => {
+  //   const addAmount = Math.min(commentsAmount - curShownCommentsAmount, 5)
+  //   setCurShownCommentsAmount(prev => prev + addAmount)
+  // }
+  // const commentsToShow = selectedPost.comments.slice(0, curShownCommentsAmount)
+  // ...
+  // return
+  // ...
+  // <ul className="social__comments">
+  //   {commentToShow.map(comment =>
+  //       <CommentItem .../>
+  //    }
+  //   </ul>
 
   useEffect(() => {
     arrayUploadedCommentsRef.current = [];
@@ -102,7 +118,9 @@ export function FullScreenImageDisplay(props: ScreenImageProp) {
                 className={`likes-count ${
                   likeChecked && "likes-count--active"
                 }`}
-                onClick={() => addLikePost(selectedPost.id)}
+                onClick={() => {
+                  addLikePost(selectedPost.id);
+                }}
               >
                 {likesAmount}
               </span>
@@ -117,14 +135,16 @@ export function FullScreenImageDisplay(props: ScreenImageProp) {
             комментариев
           </div>
           <ul className="social__comments">{commentToShow}</ul>
-          <button
-            className={`social__comments-loader  comments-loader 
-              ${isShowLoader}`}
-            type="button"
-            onClick={handleShowMorePosts}
-          >
-            Загрузить еще...
-          </button>
+          {!canUploadMore && (
+            <button
+              className={`social__comments-loader  comments-loader `}
+              type="button"
+              onClick={handleShowMorePosts}
+            >
+              Загрузить еще...
+            </button>
+          )}
+
           <div className="social__footer">
             <img
               className="social__picture"

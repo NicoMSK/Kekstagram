@@ -1,4 +1,5 @@
 export type Comment = {
+  id: string;
   author: {
     avatarImg: string;
     name: string;
@@ -7,7 +8,7 @@ export type Comment = {
 };
 
 export type Post = {
-  id: number;
+  id: string;
   url: string;
   avatarImg: string;
   name: string;
