@@ -1,20 +1,17 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { CommentItem } from "./CommentItem";
 import type { Post } from "./type";
 import { useEscClose } from "./useEscClose";
 
 type ScreenImageProp = {
   selectedPost: Post;
-  imgUrl: string;
-  alt: string;
+  heroImgUrl: string;
+  heroImgAlt: string;
   commentsAmount: number;
-  svgUrl: string;
+  authorAvatarSvg: string;
+  authorName: string;
   likesAmount: number;
-  avatarUrl?: string;
-  avatarAlt?: string;
-  commentDescription?: string;
   likeChecked: boolean;
-  nameAuthor: string;
   onCloseModalWindow: () => void;
   addLikePost: (id: string) => void;
 };
@@ -22,77 +19,38 @@ type ScreenImageProp = {
 export function FullScreenImageDisplay(props: ScreenImageProp) {
   const {
     selectedPost,
-    imgUrl,
-    alt,
-    svgUrl,
+    heroImgUrl,
+    heroImgAlt,
+    authorAvatarSvg,
+    authorName,
+    commentsAmount,
     likesAmount,
     likeChecked,
-    commentsAmount,
-    nameAuthor,
     onCloseModalWindow,
     addLikePost,
   } = props;
 
-  const commentsAmountNormalized = commentsAmount <= 5 ? commentsAmount : 5;
-  const [commentToShow, setCommentToShow] = useState<React.ReactElement[]>([]);
-  const [nextComment, setNextComment] = useState<number>(
-    commentsAmountNormalized
+  const LIMIT_SHOWING_NUMBER_COMMENTS = 5;
+
+  const [curShownCommentsAmount, setCurShownCommentsAmount] = useState(
+    Math.min(commentsAmount, LIMIT_SHOWING_NUMBER_COMMENTS)
   );
-  const canUploadMore = commentsAmount <= 5 || commentsAmount <= nextComment;
-  const arrayUploadedCommentsRef = useRef<React.ReactElement[]>([]);
+  const canUploadMore =
+    commentsAmount <= LIMIT_SHOWING_NUMBER_COMMENTS ||
+    commentsAmount <= curShownCommentsAmount;
 
-  function renderСomments(startComment: number, endComment: number) {
-    const slicedComments = selectedPost.comments
-      .slice(startComment, endComment)
-      .map((comment) => {
-        return (
-          <CommentItem
-            key={comment.id}
-            id={comment.id}
-            author={comment.author}
-            text={comment.text}
-            // comment={comment}
-          />
-        );
-      });
+  const commentsToShow = selectedPost.comments.slice(0, curShownCommentsAmount);
 
-    arrayUploadedCommentsRef.current = [
-      ...arrayUploadedCommentsRef.current,
-      ...slicedComments,
-    ];
-
-    setCommentToShow(arrayUploadedCommentsRef.current);
-  }
-  //   const [curShownCommentsAmount, setCurShownCommentsAmount] = useState(Math.min(commentsAmount, 5)
-
-  // const onShowNextCommentClick = () => {
-  //   const addAmount = Math.min(commentsAmount - curShownCommentsAmount, 5)
-  //   setCurShownCommentsAmount(prev => prev + addAmount)
-  // }
-  // const commentsToShow = selectedPost.comments.slice(0, curShownCommentsAmount)
-  // ...
-  // return
-  // ...
-  // <ul className="social__comments">
-  //   {commentToShow.map(comment =>
-  //       <CommentItem .../>
-  //    }
-  //   </ul>
+  const onShowNextCommentClick = () => {
+    const addAmount = Math.min(commentsAmount - curShownCommentsAmount, 5);
+    setCurShownCommentsAmount((prev) => prev + addAmount);
+  };
 
   useEffect(() => {
-    arrayUploadedCommentsRef.current = [];
-
-    setNextComment(commentsAmountNormalized);
-    renderСomments(0, commentsAmountNormalized);
+    setCurShownCommentsAmount(
+      Math.min(commentsAmount, LIMIT_SHOWING_NUMBER_COMMENTS)
+    );
   }, [selectedPost.id]);
-
-  const handleShowMorePosts = () => {
-    const remaining = commentsAmount - nextComment;
-    const nextLoadComments = remaining >= 5 ? 5 : remaining;
-
-    renderСomments(nextComment, nextComment + nextLoadComments);
-    setNextComment(nextComment + nextLoadComments);
-  };
 
   useEscClose(onCloseModalWindow);
 
@@ -100,18 +58,23 @@ export function FullScreenImageDisplay(props: ScreenImageProp) {
     <>
       <div className="big-picture__preview">
         <div className="big-picture__img">
-          <img src={imgUrl} alt={alt} width="600" height="600" />
+          <img
+            src={heroImgUrl}
+            alt={heroImgAlt}
+            width="600"
+            height="600"
+          />
         </div>
         <div className="big-picture__social  social">
           <div className="social__header">
             <img
               className="social__picture"
-              src={svgUrl}
-              alt={alt}
+              src={authorAvatarSvg}
+              alt={heroImgAlt}
               width="35"
               height="35"
             />
-            <p className="social__caption">{alt}</p>
+            <p className="social__caption">{heroImgAlt}</p>
             <p className="social__likes">
               Нравится{" "}
               <span
@@ -127,19 +90,30 @@ export function FullScreenImageDisplay(props: ScreenImageProp) {
             </p>
           </div>
           <div className="social__comment-count">
-            <span className="social__comment-shown-count">{nextComment}</span>{" "}
+            <span className="social__comment-shown-count">
+              {curShownCommentsAmount}
+            </span>{" "}
             из{" "}
             <span className="social__comment-total-count">
               {commentsAmount}
             </span>{" "}
             комментариев
           </div>
-          <ul className="social__comments">{commentToShow}</ul>
+          <ul className="social__comments">
+            {commentsToShow.map((comment) => {
+              return (
+                <CommentItem
+                  key={comment.id}
+                  commentProps={comment}
+                />
+              );
+            })}
+          </ul>
           {!canUploadMore && (
             <button
               className={`social__comments-loader  comments-loader `}
               type="button"
-              onClick={handleShowMorePosts}
+              onClick={onShowNextCommentClick}
             >
               Загрузить еще...
             </button>
@@ -148,8 +122,8 @@ export function FullScreenImageDisplay(props: ScreenImageProp) {
           <div className="social__footer">
             <img
               className="social__picture"
-              src={svgUrl}
-              alt={nameAuthor}
+              src={authorAvatarSvg}
+              alt={authorName}
               width="35"
               height="35"
             />
@@ -158,7 +132,11 @@ export function FullScreenImageDisplay(props: ScreenImageProp) {
               type="text"
               placeholder="Ваш комментарий..."
             />
-            <button className="social__footer-btn" type="button" name="button">
+            <button
+              className="social__footer-btn"
+              type="button"
+              name="button"
+            >
               Отправить
             </button>
           </div>

@@ -58,10 +58,10 @@ export function getCommentsArray() {
     return {
       id: crypto.randomUUID(),
       author: {
-        avatarImg: `src/img/avatar-${avatarIndexComment}.svg`,
-        name: NAMES[authorIndex],
+        avatarComment: `src/img/avatar-${avatarIndexComment}.svg`,
+        nameComment: NAMES[authorIndex],
       },
-      text: `${TEXT_COMMENT[textIndex]}`,
+      textComment: `${TEXT_COMMENT[textIndex]}`,
     };
   });
 }
@@ -74,9 +74,9 @@ export const imageDescriptions = Array.from({ length: 25 }, (_, i) => {
 
   return {
     id: crypto.randomUUID(),
-    url: `src/photos/${postNumber}.jpg`,
-    avatarImg: `src/img/avatar-${avatarIndex}.svg`,
-    name: NAMES[authorIndex],
+    heroImgUrl: `src/photos/${postNumber}.jpg`,
+    authorAvatarPost: `src/img/avatar-${avatarIndex}.svg`,
+    authorNamePost: NAMES[authorIndex],
     description: `${DESCRIPTION[descIndex]}`,
     likeAmount: Math.floor(Math.random() * 100) + 10,
     likeChecked: false,

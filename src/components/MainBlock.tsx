@@ -41,7 +41,7 @@ export function MainBlock() {
           return (
             <UsersImage
               key={item.id}
-              imgUrl={item.url}
+              imgUrl={item.heroImgUrl}
               alt={item.description}
               commentsAmount={item.comments.length}
               likesAmount={item.likeAmount}
@@ -68,14 +68,14 @@ export function MainBlock() {
             onCloseModalWindow={() => {
               closeModal(setIsModalOpen);
             }}
-            imgUrl={selectedPost.url}
-            alt={selectedPost.description}
+            heroImgUrl={selectedPost.heroImgUrl}
+            heroImgAlt={selectedPost.description}
             commentsAmount={selectedPost.comments.length}
-            svgUrl={selectedPost.avatarImg}
+            authorAvatarSvg={selectedPost.authorAvatarPost}
             likesAmount={selectedPost.likeAmount}
             likeChecked={selectedPost.likeChecked}
             addLikePost={addLikePost}
-            nameAuthor={selectedPost.name}
+            authorName={selectedPost.authorNamePost}
           />
         )}
       </section>
