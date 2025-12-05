@@ -14,6 +14,7 @@ type ScreenImageProp = {
   likeChecked: boolean;
   onCloseModalWindow: () => void;
   addLikePost: (id: string) => void;
+  addNewCommentInPost: (id: string, text: string) => void;
 };
 
 export function FullScreenImageDisplay(props: ScreenImageProp) {
@@ -28,8 +29,10 @@ export function FullScreenImageDisplay(props: ScreenImageProp) {
     likeChecked,
     onCloseModalWindow,
     addLikePost,
+    addNewCommentInPost,
   } = props;
 
+  const [inputValue, setInputValue] = useState("");
   const LIMIT_SHOWING_NUMBER_COMMENTS = 5;
 
   const [curShownCommentsAmount, setCurShownCommentsAmount] = useState(
@@ -50,7 +53,14 @@ export function FullScreenImageDisplay(props: ScreenImageProp) {
     setCurShownCommentsAmount(
       Math.min(commentsAmount, LIMIT_SHOWING_NUMBER_COMMENTS)
     );
+    setInputValue("");
   }, [selectedPost.id]);
+
+  function openAllCommentsOnce() {
+    if (inputValue.trim().length > 0) {
+      setCurShownCommentsAmount(commentsAmount + 1);
+    }
+  }
 
   useEscClose(onCloseModalWindow);
 
@@ -131,11 +141,20 @@ export function FullScreenImageDisplay(props: ScreenImageProp) {
               className="social__footer-text"
               type="text"
               placeholder="Ваш комментарий..."
+              value={inputValue}
+              onChange={(e) => {
+                setInputValue(e.target.value);
+              }}
             />
             <button
               className="social__footer-btn"
               type="button"
               name="button"
+              onClick={() => {
+                addNewCommentInPost(selectedPost.id, inputValue);
+                openAllCommentsOnce();
+                setInputValue("");
+              }}
             >
               Отправить
             </button>

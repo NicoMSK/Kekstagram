@@ -47,22 +47,27 @@ function getRandomInteger(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
+export function getNewComment(textComment: string) {
+  const authorIndex = getRandomInteger(0, NAMES.length - 1);
+  const avatarIndexComment = getRandomInteger(MIN_AVATAR, MAX_AVATAR);
+
+  return {
+    id: crypto.randomUUID(),
+    author: {
+      avatarComment: `src/img/avatar-${avatarIndexComment}.svg`,
+      nameComment: NAMES[authorIndex],
+    },
+    textComment: textComment,
+  };
+}
+
 export function getCommentsArray() {
   const commentsAmount = getRandomInteger(MIN_COMMENT, MAX_COMMENT);
 
   return Array.from({ length: commentsAmount }, () => {
-    const authorIndex = getRandomInteger(0, NAMES.length - 1);
     const textIndex = getRandomInteger(0, TEXT_COMMENT.length - 1);
-    const avatarIndexComment = getRandomInteger(MIN_AVATAR, MAX_AVATAR);
 
-    return {
-      id: crypto.randomUUID(),
-      author: {
-        avatarComment: `src/img/avatar-${avatarIndexComment}.svg`,
-        nameComment: NAMES[authorIndex],
-      },
-      textComment: `${TEXT_COMMENT[textIndex]}`,
-    };
+    return getNewComment(TEXT_COMMENT[textIndex]);
   });
 }
 

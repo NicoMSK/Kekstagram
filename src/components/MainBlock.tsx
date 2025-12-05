@@ -2,7 +2,7 @@ import { FullScreenImageDisplay } from "./FullScreenImageDisplay";
 import { ImageFilter } from "./ImageFilter";
 import { UsersImage } from "./UsersImage";
 import { UploadingNewImage } from "./UploadingNewImage";
-import { imageDescriptions } from "./constants";
+import { getNewComment, imageDescriptions } from "./constants";
 import { useState } from "react";
 import { closeModal, openModal } from "./utils";
 
@@ -23,7 +23,22 @@ export function MainBlock() {
             likeChecked: true,
           };
         }
+        return { ...post };
+      })
+    );
+  }
 
+  function addNewCommentInPost(id: string, text: string) {
+    if (text.trim().length === 0) return;
+
+    setPosts((prevPost) =>
+      prevPost.map((post) => {
+        if (post.id === id) {
+          return {
+            ...post,
+            comments: [...post.comments, getNewComment(text)],
+          };
+        }
         return { ...post };
       })
     );
@@ -76,6 +91,7 @@ export function MainBlock() {
             likeChecked={selectedPost.likeChecked}
             addLikePost={addLikePost}
             authorName={selectedPost.authorNamePost}
+            addNewCommentInPost={addNewCommentInPost}
           />
         )}
       </section>
