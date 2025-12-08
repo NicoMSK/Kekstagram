@@ -32,8 +32,9 @@ export function FullScreenImageDisplay(props: ScreenImageProp) {
     addNewCommentInPost,
   } = props;
 
-  const [inputValue, setInputValue] = useState("");
   const LIMIT_SHOWING_NUMBER_COMMENTS = 5;
+  const NEW_COMMENT = 1;
+  const [inputValue, setInputValue] = useState("");
 
   const [curShownCommentsAmount, setCurShownCommentsAmount] = useState(
     Math.min(commentsAmount, LIMIT_SHOWING_NUMBER_COMMENTS)
@@ -58,9 +59,17 @@ export function FullScreenImageDisplay(props: ScreenImageProp) {
 
   function openAllCommentsOnce() {
     if (inputValue.trim().length > 0) {
-      setCurShownCommentsAmount(commentsAmount + 1);
+      setCurShownCommentsAmount(commentsAmount + NEW_COMMENT);
     }
   }
+
+  const handleAddComment = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    addNewCommentInPost(selectedPost.id, inputValue);
+    openAllCommentsOnce();
+    setInputValue("");
+  };
 
   useEscClose(onCloseModalWindow);
 
@@ -129,7 +138,10 @@ export function FullScreenImageDisplay(props: ScreenImageProp) {
             </button>
           )}
 
-          <div className="social__footer">
+          <form
+            className="social__footer"
+            onSubmit={(e) => handleAddComment(e)}
+          >
             <img
               className="social__picture"
               src={authorAvatarSvg}
@@ -148,17 +160,12 @@ export function FullScreenImageDisplay(props: ScreenImageProp) {
             />
             <button
               className="social__footer-btn"
-              type="button"
+              type="submit"
               name="button"
-              onClick={() => {
-                addNewCommentInPost(selectedPost.id, inputValue);
-                openAllCommentsOnce();
-                setInputValue("");
-              }}
             >
               Отправить
             </button>
-          </div>
+          </form>
         </div>
         <button
           className="big-picture__cancel  cancel"
