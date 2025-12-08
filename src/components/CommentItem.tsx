@@ -9,12 +9,12 @@ export function CommentItem({ commentProps }: CommentItemProps) {
     <li className="social__comment">
       <img
         className="social__picture"
-        src={commentProps.author.avatarComment}
-        alt={commentProps.author.nameComment}
+        src={commentProps.author.avatar}
+        alt={commentProps.author.name}
         width="35"
         height="35"
       />
-      <p className="social__text">{commentProps.textComment}</p>
+      <p className="social__text">{commentProps.text}</p>
     </li>
   );
 }

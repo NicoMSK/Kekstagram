@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
-import { CommentItem } from "./CommentItem";
 import type { Post } from "./type";
 import { useEscClose } from "./useEscClose";
+import { CommentList } from "./CommentList";
 
 type ScreenImageProp = {
   selectedPost: Post;
@@ -29,28 +28,6 @@ export function FullScreenImageDisplay(props: ScreenImageProp) {
     onCloseModalWindow,
     addLikePost,
   } = props;
-
-  const LIMIT_SHOWING_NUMBER_COMMENTS = 5;
-
-  const [curShownCommentsAmount, setCurShownCommentsAmount] = useState(
-    Math.min(commentsAmount, LIMIT_SHOWING_NUMBER_COMMENTS)
-  );
-  const canUploadMore =
-    commentsAmount <= LIMIT_SHOWING_NUMBER_COMMENTS ||
-    commentsAmount <= curShownCommentsAmount;
-
-  const commentsToShow = selectedPost.comments.slice(0, curShownCommentsAmount);
-
-  const onShowNextCommentClick = () => {
-    const addAmount = Math.min(commentsAmount - curShownCommentsAmount, 5);
-    setCurShownCommentsAmount((prev) => prev + addAmount);
-  };
-
-  useEffect(() => {
-    setCurShownCommentsAmount(
-      Math.min(commentsAmount, LIMIT_SHOWING_NUMBER_COMMENTS)
-    );
-  }, [selectedPost.id]);
 
   useEscClose(onCloseModalWindow);
 
@@ -89,36 +66,10 @@ export function FullScreenImageDisplay(props: ScreenImageProp) {
               </span>
             </p>
           </div>
-          <div className="social__comment-count">
-            <span className="social__comment-shown-count">
-              {curShownCommentsAmount}
-            </span>{" "}
-            из{" "}
-            <span className="social__comment-total-count">
-              {commentsAmount}
-            </span>{" "}
-            комментариев
-          </div>
-          <ul className="social__comments">
-            {commentsToShow.map((comment) => {
-              return (
-                <CommentItem
-                  key={comment.id}
-                  commentProps={comment}
-                />
-              );
-            })}
-          </ul>
-          {!canUploadMore && (
-            <button
-              className={`social__comments-loader  comments-loader `}
-              type="button"
-              onClick={onShowNextCommentClick}
-            >
-              Загрузить еще...
-            </button>
-          )}
-
+          <CommentList
+            commentsAmount={commentsAmount}
+            selectedPost={selectedPost}
+          />
           <div className="social__footer">
             <img
               className="social__picture"

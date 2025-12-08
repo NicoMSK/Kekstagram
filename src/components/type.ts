@@ -1,15 +1,15 @@
 export type Comment = {
   id: string;
   author: {
-    avatarComment: string;
-    nameComment: string;
+    avatar: string;
+    name: string;
   };
-  textComment: string;
+  text: string;
 };
 
 export type Post = {
   id: string;
-  heroImgUrl: string;
+  postImgUrl: string;
   authorAvatarPost: string;
   authorNamePost: string;
   description: string;
