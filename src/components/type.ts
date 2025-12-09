@@ -1,16 +1,17 @@
 export type Comment = {
+  id: string;
   author: {
-    avatarImg: string;
+    avatar: string;
     name: string;
   };
   text: string;
 };
 
 export type Post = {
-  id: number;
-  url: string;
-  avatarImg: string;
-  name: string;
+  id: string;
+  postImgUrl: string;
+  authorAvatarPost: string;
+  authorNamePost: string;
   description: string;
   likeAmount: number;
   likeChecked: boolean;

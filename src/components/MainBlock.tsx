@@ -2,26 +2,29 @@ import { FullScreenImageDisplay } from "./FullScreenImageDisplay";
 import { ImageFilter } from "./ImageFilter";
 import { UsersImage } from "./UsersImage";
 import { UploadingNewImage } from "./UploadingNewImage";
-import { imageDescription } from "./constants";
+import { imageDescriptions } from "./constants";
 import { useState } from "react";
 import { closeModal, openModal } from "./utils";
-import type { Post } from "./type";
 
 export function MainBlock() {
-  const [posts, setPosts] = useState(imageDescription);
+  const [posts, setPosts] = useState(imageDescriptions);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedPost, setSelectedPost] = useState<Post | null>(null);
+  const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
 
-  function addLikePost(id: number) {
+  const selectedPost = posts.find((post) => post.id === selectedPostId);
+
+  function addLikePost(id: string) {
     setPosts((prev) =>
-      prev.filter((post) => {
-        if (post.likeChecked) return post;
-
-        if (post.id === id) {
-          post.likeAmount += 1;
-          post.likeChecked = true;
+      prev.map((post) => {
+        if (post.id === id && !post.likeChecked) {
+          return {
+            ...post,
+            likeAmount: post.likeAmount + 1,
+            likeChecked: true,
+          };
         }
-        return post;
+
+        return { ...post };
       })
     );
   }
@@ -38,12 +41,12 @@ export function MainBlock() {
           return (
             <UsersImage
               key={item.id}
-              imgUrl={item.url}
+              imgUrl={item.postImgUrl}
               alt={item.description}
               commentsAmount={item.comments.length}
               likesAmount={item.likeAmount}
               onClick={() => {
-                setSelectedPost(item);
+                setSelectedPostId(item.id);
                 openModal(setIsModalOpen);
               }}
             />
@@ -65,14 +68,14 @@ export function MainBlock() {
             onCloseModalWindow={() => {
               closeModal(setIsModalOpen);
             }}
-            imgUrl={selectedPost.url}
-            alt={selectedPost.description}
+            heroImgUrl={selectedPost.postImgUrl}
+            heroImgAlt={selectedPost.description}
             commentsAmount={selectedPost.comments.length}
-            svgUrl={selectedPost.avatarImg}
+            authorAvatarSvg={selectedPost.authorAvatarPost}
             likesAmount={selectedPost.likeAmount}
             likeChecked={selectedPost.likeChecked}
             addLikePost={addLikePost}
-            nameAuthor={selectedPost.name}
+            authorName={selectedPost.authorNamePost}
           />
         )}
       </section>
