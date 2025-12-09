@@ -16,7 +16,7 @@ export function CommentList({
   const [curShownCommentsAmount, setCurShownCommentsAmount] = useState(
     Math.min(commentsAmount, LIMIT_SHOWING_NUMBER_COMMENTS)
   );
-  const canUploadMore = commentsAmount <= curShownCommentsAmount;
+  const canUploadMore = commentsAmount !== curShownCommentsAmount;
 
   const commentsToShow = selectedPost.comments.slice(0, curShownCommentsAmount);
 
@@ -53,7 +53,7 @@ export function CommentList({
           );
         })}
       </ul>
-      {!canUploadMore && (
+      {canUploadMore && (
         <button
           className="social__comments-loader  comments-loader"
           type="button"
