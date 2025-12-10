@@ -2,13 +2,14 @@ import { FullScreenImageDisplay } from "./FullScreenImageDisplay";
 import { ImageFilter } from "./ImageFilter";
 import { UsersImage } from "./UsersImage";
 import { UploadingNewImage } from "./UploadingNewImage";
-import { getNewComment, imageDescriptions } from "./constants";
 import { useState } from "react";
-import { closeModal, openModal } from "./utils";
+import { useModal } from "../context/useModal.ts";
+import { getNewComment } from "./getNewComment.ts";
+import { imageDescriptions } from "./imageDescriptionsArray.ts";
 
 export function MainBlock() {
   const [posts, setPosts] = useState(imageDescriptions);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { isOpen, openModal, closeModal } = useModal();
   const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
 
   const selectedPost = posts.find((post) => post.id === selectedPostId);
@@ -36,7 +37,7 @@ export function MainBlock() {
         if (post.id === id) {
           return {
             ...post,
-            comments: [...post.comments, getNewComment(text)],
+            comments: [getNewComment(text), ...post.comments],
           };
         }
         return { ...post };
@@ -62,17 +63,15 @@ export function MainBlock() {
               likesAmount={item.likeAmount}
               onClick={() => {
                 setSelectedPostId(item.id);
-                openModal(setIsModalOpen);
+                openModal();
               }}
             />
           );
         })}
       </section>
       <section
-        className={`big-picture  overlay  ${!isModalOpen && "hidden"}`}
-        onClick={(e) =>
-          e.currentTarget === e.target && closeModal(setIsModalOpen)
-        }
+        className={`big-picture  overlay  ${!isOpen && "hidden"}`}
+        onClick={(e) => e.currentTarget === e.target && closeModal()}
       >
         <h2 className="big-picture__title  visually-hidden">
           Просмотр фотографии
@@ -81,7 +80,7 @@ export function MainBlock() {
           <FullScreenImageDisplay
             selectedPost={selectedPost}
             onCloseModalWindow={() => {
-              closeModal(setIsModalOpen);
+              closeModal();
             }}
             heroImgUrl={selectedPost.heroImgUrl}
             heroImgAlt={selectedPost.description}

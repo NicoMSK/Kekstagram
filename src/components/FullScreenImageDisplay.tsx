@@ -33,7 +33,6 @@ export function FullScreenImageDisplay(props: ScreenImageProp) {
   } = props;
 
   const LIMIT_SHOWING_NUMBER_COMMENTS = 5;
-  const NEW_COMMENT = 1;
   const [inputValue, setInputValue] = useState("");
 
   const [curShownCommentsAmount, setCurShownCommentsAmount] = useState(
@@ -57,17 +56,10 @@ export function FullScreenImageDisplay(props: ScreenImageProp) {
     setInputValue("");
   }, [selectedPost.id]);
 
-  function openAllCommentsOnce() {
-    if (inputValue.trim().length > 0) {
-      setCurShownCommentsAmount(commentsAmount + NEW_COMMENT);
-    }
-  }
-
   const handleAddComment = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     addNewCommentInPost(selectedPost.id, inputValue);
-    openAllCommentsOnce();
     setInputValue("");
   };
 

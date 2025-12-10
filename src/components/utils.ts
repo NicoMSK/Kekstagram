@@ -1,11 +1,3 @@
-type SetBool = React.Dispatch<React.SetStateAction<boolean>>;
-
-export function openModal(setFunction: SetBool) {
-  document.body.classList.add("modal-open");
-  setFunction(true);
-}
-
-export function closeModal(setFunction: SetBool) {
-  document.body.classList.remove("modal-open");
-  setFunction(false);
+export function getRandomInteger(min: number, max: number) {
+  return Math.floor(Math.random() * (max - min + 1) + min);
 }

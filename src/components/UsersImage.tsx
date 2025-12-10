@@ -10,7 +10,11 @@ export function UsersImage(props: UsersImageProps) {
   const { imgUrl, alt, commentsAmount, likesAmount, onClick } = props;
 
   return (
-    <a className="picture" href="#" onClick={onClick}>
+    <a
+      className="picture"
+      href="#"
+      onClick={onClick}
+    >
       <img
         className="picture__img"
         src={imgUrl}
