@@ -8,9 +8,9 @@ export function getNewComment(textComment: string) {
   return {
     id: crypto.randomUUID(),
     author: {
-      avatarComment: `src/img/avatar-${avatarIndexComment}.svg`,
-      nameComment: NAMES[authorIndex],
+      avatar: `src/img/avatar-${avatarIndexComment}.svg`,
+      name: NAMES[authorIndex],
     },
-    textComment: textComment,
+    text: textComment,
   };
 }
