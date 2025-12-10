@@ -1,7 +1,7 @@
 import type { Post } from "./type";
 import { useEscClose } from "./useEscClose";
 import { CommentList } from "./CommentList";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type ScreenImageProp = {
   selectedPost: Post;
@@ -40,6 +40,10 @@ export function FullScreenImageDisplay(props: ScreenImageProp) {
     addNewCommentInPost(selectedPost.id, inputValue);
     setInputValue("");
   };
+
+  useEffect(() => {
+    setInputValue("");
+  }, [selectedPost.id]);
 
   useEscClose(onCloseModalWindow);
 

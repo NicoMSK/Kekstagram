@@ -3,6 +3,7 @@ import type { Post } from "./type";
 import { useEffect, useState } from "react";
 
 const LIMIT_SHOWING_NUMBER_COMMENTS = 5;
+const NEW_COMMENT = 1;
 
 type CommentListProps = {
   commentsAmount: number;
@@ -29,6 +30,10 @@ export function CommentList({
   };
 
   useEffect(() => {
+    setCurShownCommentsAmount((prev) => prev + NEW_COMMENT);
+  }, [selectedPost.comments.length]);
+
+  useEffect(() => {
     setCurShownCommentsAmount(
       Math.min(commentsAmount, LIMIT_SHOWING_NUMBER_COMMENTS)
     );
@@ -40,7 +45,10 @@ export function CommentList({
         <span className="social__comment-shown-count">
           {curShownCommentsAmount}
         </span>{" "}
-        из <span className="social__comment-total-count">{commentsAmount}</span>{" "}
+        из
+        <span className="social__comment-total-count">
+          {commentsAmount}
+        </span>{" "}
         комментариев
       </div>
       <ul className="social__comments">
