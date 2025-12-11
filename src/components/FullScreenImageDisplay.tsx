@@ -17,6 +17,8 @@ type ScreenImageProp = {
   addNewCommentInPost: (id: string, text: string) => void;
 };
 
+const LIMIT_SHOWING_NUMBER_COMMENTS = 5;
+
 export function FullScreenImageDisplay(props: ScreenImageProp) {
   const {
     selectedPost,
@@ -32,16 +34,26 @@ export function FullScreenImageDisplay(props: ScreenImageProp) {
     addNewCommentInPost,
   } = props;
 
+  const [curShownCommentsAmount, setCurShownCommentsAmount] = useState(
+    Math.min(commentsAmount, LIMIT_SHOWING_NUMBER_COMMENTS)
+  );
   const [inputValue, setInputValue] = useState("");
 
   const handleAddComment = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     addNewCommentInPost(selectedPost.id, inputValue);
+
+    if (inputValue.trim().length !== 0) {
+      setCurShownCommentsAmount((prev) => prev + 1);
+    }
     setInputValue("");
   };
 
   useEffect(() => {
+    setCurShownCommentsAmount(
+      Math.min(commentsAmount, LIMIT_SHOWING_NUMBER_COMMENTS)
+    );
     setInputValue("");
   }, [selectedPost.id]);
 
@@ -85,6 +97,9 @@ export function FullScreenImageDisplay(props: ScreenImageProp) {
           <CommentList
             commentsAmount={commentsAmount}
             selectedPost={selectedPost}
+            limitShowComment={LIMIT_SHOWING_NUMBER_COMMENTS}
+            curShownCommentsAmount={curShownCommentsAmount}
+            setCurShownCommentsAmount={setCurShownCommentsAmount}
           />
           <form
             className="social__footer"
