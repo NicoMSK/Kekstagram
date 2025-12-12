@@ -1,3 +1,8 @@
+export const MIN_COMMENT = 3;
+export const MAX_COMMENT = 25;
+export const MIN_AVATAR = 1;
+export const MAX_AVATAR = 6;
+
 export const NAMES = [
   "Иван",
   "Хуан Себастьян",
@@ -37,49 +42,3 @@ export const TEXT_COMMENT = [
   "Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.",
   "Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!",
 ];
-
-const MIN_COMMENT = 3;
-const MAX_COMMENT = 25;
-const MIN_AVATAR = 1;
-const MAX_AVATAR = 6;
-
-function getRandomInteger(min: number, max: number) {
-  return Math.floor(Math.random() * (max - min + 1) + min);
-}
-
-export function getCommentsArray() {
-  const commentsAmount = getRandomInteger(MIN_COMMENT, MAX_COMMENT);
-
-  return Array.from({ length: commentsAmount }, () => {
-    const authorIndex = getRandomInteger(0, NAMES.length - 1);
-    const textIndex = getRandomInteger(0, TEXT_COMMENT.length - 1);
-    const avatarIndexComment = getRandomInteger(MIN_AVATAR, MAX_AVATAR);
-
-    return {
-      id: crypto.randomUUID(),
-      author: {
-        avatar: `src/img/avatar-${avatarIndexComment}.svg`,
-        name: NAMES[authorIndex],
-      },
-      text: `${TEXT_COMMENT[textIndex]}`,
-    };
-  });
-}
-
-export const imageDescriptions = Array.from({ length: 25 }, (_, i) => {
-  const postNumber = i + 1;
-  const authorIndex = getRandomInteger(0, NAMES.length - 1);
-  const avatarIndex = getRandomInteger(MIN_AVATAR, MAX_AVATAR);
-  const descIndex = getRandomInteger(0, DESCRIPTION.length - 1);
-
-  return {
-    id: crypto.randomUUID(),
-    postImgUrl: `src/photos/${postNumber}.jpg`,
-    authorAvatarPost: `src/img/avatar-${avatarIndex}.svg`,
-    authorNamePost: NAMES[authorIndex],
-    description: `${DESCRIPTION[descIndex]}`,
-    likeAmount: Math.floor(Math.random() * 100) + 10,
-    likeChecked: false,
-    comments: getCommentsArray(),
-  };
-});

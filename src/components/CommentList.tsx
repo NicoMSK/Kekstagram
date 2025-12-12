@@ -1,38 +1,31 @@
 import { CommentItem } from "./CommentItem";
 import type { Post } from "./type";
-import { useEffect, useState } from "react";
-
-const LIMIT_SHOWING_NUMBER_COMMENTS = 5;
 
 type CommentListProps = {
   commentsAmount: number;
   selectedPost: Post;
+  curShownCommentsAmount: number;
+  limitShowComment: number;
+  setCurShownCommentsAmount: React.Dispatch<React.SetStateAction<number>>;
 };
 
 export function CommentList({
   commentsAmount,
   selectedPost,
+  curShownCommentsAmount,
+  limitShowComment,
+  setCurShownCommentsAmount,
 }: CommentListProps) {
-  const [curShownCommentsAmount, setCurShownCommentsAmount] = useState(
-    Math.min(commentsAmount, LIMIT_SHOWING_NUMBER_COMMENTS)
-  );
   const canUploadMore = commentsAmount !== curShownCommentsAmount;
-
   const commentsToShow = selectedPost.comments.slice(0, curShownCommentsAmount);
 
   const onShowNextCommentClick = () => {
     const addAmount = Math.min(
       commentsAmount - curShownCommentsAmount,
-      LIMIT_SHOWING_NUMBER_COMMENTS
+      limitShowComment
     );
     setCurShownCommentsAmount((prev) => prev + addAmount);
   };
-
-  useEffect(() => {
-    setCurShownCommentsAmount(
-      Math.min(commentsAmount, LIMIT_SHOWING_NUMBER_COMMENTS)
-    );
-  }, [selectedPost.id]);
 
   return (
     <>

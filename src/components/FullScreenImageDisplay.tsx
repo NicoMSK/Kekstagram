@@ -1,6 +1,7 @@
 import type { Post } from "./type";
 import { useEscClose } from "./useEscClose";
 import { CommentList } from "./CommentList";
+import { useEffect, useState } from "react";
 
 type ScreenImageProp = {
   selectedPost: Post;
@@ -13,7 +14,10 @@ type ScreenImageProp = {
   likeChecked: boolean;
   onCloseModalWindow: () => void;
   addLikePost: (id: string) => void;
+  addNewCommentInPost: (id: string, text: string) => void;
 };
+
+const LIMIT_SHOWING_NUMBER_COMMENTS = 5;
 
 export function FullScreenImageDisplay(props: ScreenImageProp) {
   const {
@@ -27,7 +31,31 @@ export function FullScreenImageDisplay(props: ScreenImageProp) {
     likeChecked,
     onCloseModalWindow,
     addLikePost,
+    addNewCommentInPost,
   } = props;
+
+  const [curShownCommentsAmount, setCurShownCommentsAmount] = useState(
+    Math.min(commentsAmount, LIMIT_SHOWING_NUMBER_COMMENTS)
+  );
+  const [inputValue, setInputValue] = useState("");
+
+  const handleAddComment = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    addNewCommentInPost(selectedPost.id, inputValue);
+
+    if (inputValue.trim().length !== 0) {
+      setCurShownCommentsAmount((prev) => prev + 1);
+    }
+    setInputValue("");
+  };
+
+  useEffect(() => {
+    setCurShownCommentsAmount(
+      Math.min(commentsAmount, LIMIT_SHOWING_NUMBER_COMMENTS)
+    );
+    setInputValue("");
+  }, [selectedPost.id]);
 
   useEscClose(onCloseModalWindow);
 
@@ -69,8 +97,14 @@ export function FullScreenImageDisplay(props: ScreenImageProp) {
           <CommentList
             commentsAmount={commentsAmount}
             selectedPost={selectedPost}
+            limitShowComment={LIMIT_SHOWING_NUMBER_COMMENTS}
+            curShownCommentsAmount={curShownCommentsAmount}
+            setCurShownCommentsAmount={setCurShownCommentsAmount}
           />
-          <div className="social__footer">
+          <form
+            className="social__footer"
+            onSubmit={(e) => handleAddComment(e)}
+          >
             <img
               className="social__picture"
               src={authorAvatarSvg}
@@ -82,15 +116,19 @@ export function FullScreenImageDisplay(props: ScreenImageProp) {
               className="social__footer-text"
               type="text"
               placeholder="Ваш комментарий..."
+              value={inputValue}
+              onChange={(e) => {
+                setInputValue(e.target.value);
+              }}
             />
             <button
               className="social__footer-btn"
-              type="button"
+              type="submit"
               name="button"
             >
               Отправить
             </button>
-          </div>
+          </form>
         </div>
         <button
           className="big-picture__cancel  cancel"

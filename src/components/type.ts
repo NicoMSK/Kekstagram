@@ -9,7 +9,7 @@ export type Comment = {
 
 export type Post = {
   id: string;
-  postImgUrl: string;
+  heroImgUrl: string;
   authorAvatarPost: string;
   authorNamePost: string;
   description: string;
