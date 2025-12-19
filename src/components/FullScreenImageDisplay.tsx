@@ -1,5 +1,5 @@
-import type { Post } from "./type";
-import { useEscClose } from "./useEscClose";
+import type { Post } from "../types/types";
+import { useEscClose } from "../hooks/useEscClose";
 import { CommentList } from "./CommentList";
 import { useEffect, useState } from "react";
 

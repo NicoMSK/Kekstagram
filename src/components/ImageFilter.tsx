@@ -1,19 +1,24 @@
 import { useState } from "react";
+import { FILTER_STATUS } from "../constants/constants";
+import type { FilterStatus } from "../types/types";
+import { Button } from "./Button";
 
-export function ImageFilter() {
-  const idFilter = {
-    default: "default",
-    random: "random",
-    discussed: "discussed",
-  };
-  const [currentFilter, setCurrentFilter] = useState("default");
+export function ImageFilter(props: {
+  filterPosts: (curFilter: FilterStatus) => void;
+}) {
+  const { filterPosts } = props;
+
+  const [currentFilter, setCurrentFilter] = useState<FilterStatus>("default");
 
   function changeFilter(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!(e.target instanceof HTMLButtonElement)) return;
 
-    if (e.target.id !== currentFilter) {
-      setCurrentFilter(e.target.id);
+    const filter = e.target.id as FilterStatus;
+
+    if (filter !== currentFilter) {
+      setCurrentFilter(filter);
+      filterPosts(filter);
     }
   }
 
@@ -27,34 +32,24 @@ export function ImageFilter() {
         autoComplete="off"
         onClick={(e) => changeFilter(e)}
       >
-        <button
-          className={`img-filters__button  ${
-            currentFilter === idFilter.default && "img-filters__button--active"
-          }`}
-          type="button"
-          id={idFilter.default}
+        <Button
+          checkPressedButton={currentFilter === FILTER_STATUS.default}
+          idButton={FILTER_STATUS.default}
         >
           По умолчанию
-        </button>
-        <button
-          className={`img-filters__button  ${
-            currentFilter === idFilter.random && "img-filters__button--active"
-          }`}
-          type="button"
-          id={idFilter.random}
+        </Button>
+        <Button
+          checkPressedButton={currentFilter === FILTER_STATUS.random}
+          idButton={FILTER_STATUS.random}
         >
           Случайные
-        </button>
-        <button
-          className={`img-filters__button  ${
-            currentFilter === idFilter.discussed &&
-            "img-filters__button--active"
-          }`}
-          type="button"
-          id={idFilter.discussed}
+        </Button>
+        <Button
+          checkPressedButton={currentFilter === FILTER_STATUS.discussed}
+          idButton={FILTER_STATUS.discussed}
         >
           Обсуждаемые
-        </button>
+        </Button>
       </form>
     </section>
   );

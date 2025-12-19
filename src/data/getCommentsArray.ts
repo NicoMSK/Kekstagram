@@ -1,6 +1,6 @@
-import { MAX_COMMENT, MIN_COMMENT, TEXT_COMMENT } from "./constants";
+import { MAX_COMMENT, MIN_COMMENT, TEXT_COMMENT } from "../constants/constants";
 import { getNewComment } from "./getNewComment";
-import { getRandomInteger } from "./utils";
+import { getRandomInteger } from "../utils/randomInteger";
 
 export function getCommentsArray() {
   const commentsAmount = getRandomInteger(MIN_COMMENT, MAX_COMMENT);

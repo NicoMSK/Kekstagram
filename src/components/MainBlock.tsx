@@ -4,8 +4,10 @@ import { UsersImage } from "./UsersImage";
 import { UploadingNewImage } from "./UploadingNewImage";
 import { useState } from "react";
 import { useModal } from "../context/useModal.ts";
-import { getNewComment } from "./getNewComment.ts";
-import { imageDescriptions } from "./imageDescriptionsArray.ts";
+import { getNewComment } from "../data/getNewComment.ts";
+import { imageDescriptions } from "../data/imageDescriptionsArray.ts";
+import { getRandomInteger } from "../utils/randomInteger.ts";
+import type { FilterStatus } from "../types/types.ts";
 
 export function MainBlock() {
   const [posts, setPosts] = useState(imageDescriptions);
@@ -45,9 +47,26 @@ export function MainBlock() {
     );
   }
 
+  function filterPosts(currentFilter: FilterStatus) {
+    setPosts((prev) => {
+      if (currentFilter === "default") {
+        return imageDescriptions.slice();
+      }
+      return prev.toSorted((post1, postN) => {
+        if (currentFilter === "discussed") {
+          return postN.comments.length - post1.comments.length;
+        }
+        if (currentFilter === "random") {
+          return getRandomInteger(-1, 1);
+        }
+        return 0;
+      });
+    });
+  }
+
   return (
     <main>
-      <ImageFilter />
+      <ImageFilter filterPosts={filterPosts} />
       <section className="pictures  container">
         <h2 className="pictures__title  visually-hidden">
           Фотографии других пользователей

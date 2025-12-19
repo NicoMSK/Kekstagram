@@ -1,5 +1,5 @@
-import { MAX_AVATAR, MIN_AVATAR, NAMES } from "./constants";
-import { getRandomInteger } from "./utils";
+import { MAX_AVATAR, MIN_AVATAR, NAMES } from "../constants/constants";
+import { getRandomInteger } from "../utils/randomInteger";
 
 export function getNewComment(textComment: string) {
   const authorIndex = getRandomInteger(0, NAMES.length - 1);
