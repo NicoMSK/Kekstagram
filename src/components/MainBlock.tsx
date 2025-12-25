@@ -52,15 +52,15 @@ export function MainBlock() {
       if (currentFilter === "default") {
         return imageDescriptions.slice();
       }
-      return prev.toSorted((post1, postN) => {
-        if (currentFilter === "discussed") {
-          return postN.comments.length - post1.comments.length;
-        }
-        if (currentFilter === "random") {
-          return getRandomInteger(-1, 1);
-        }
-        return 0;
-      });
+      if (currentFilter === "discussed") {
+        return prev.toSorted(
+          (post1, postN) => postN.comments.length - post1.comments.length
+        );
+      }
+      if (currentFilter === "random") {
+        return prev.toSorted(() => getRandomInteger(-1, 1));
+      }
+      throw new Error("unexpected beharior");
     });
   }
 

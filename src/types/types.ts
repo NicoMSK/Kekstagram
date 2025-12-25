@@ -19,9 +19,3 @@ export type Post = {
 };
 
 export type FilterStatus = "default" | "random" | "discussed";
-
-export type ButtonProps = {
-  checkPressedButton: boolean;
-  idButton: string;
-  children: string;
-};

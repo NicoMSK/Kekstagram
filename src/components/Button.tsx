@@ -1,4 +1,8 @@
-import type { ButtonProps } from "../types/types";
+type ButtonProps = {
+  checkPressedButton: boolean;
+  idButton: string;
+  children: string;
+};
 
 export function Button(props: ButtonProps) {
   const { checkPressedButton, idButton, children } = props;

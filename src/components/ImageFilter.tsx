@@ -3,9 +3,11 @@ import { FILTER_STATUS } from "../constants/constants";
 import type { FilterStatus } from "../types/types";
 import { Button } from "./Button";
 
-export function ImageFilter(props: {
+type ImageFilterProps = {
   filterPosts: (curFilter: FilterStatus) => void;
-}) {
+};
+
+export function ImageFilter(props: ImageFilterProps) {
   const { filterPosts } = props;
 
   const [currentFilter, setCurrentFilter] = useState<FilterStatus>("default");
