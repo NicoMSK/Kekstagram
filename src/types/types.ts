@@ -17,3 +17,5 @@ export type Post = {
   likeChecked: boolean;
   comments: Comment[];
 };
+
+export type FilterStatus = "default" | "random" | "discussed";

@@ -1,6 +1,11 @@
-import { DESCRIPTION, MAX_AVATAR, MIN_AVATAR, NAMES } from "./constants";
+import {
+  DESCRIPTION,
+  MAX_AVATAR,
+  MIN_AVATAR,
+  NAMES,
+} from "../constants/constants";
 import { getCommentsArray } from "./getCommentsArray";
-import { getRandomInteger } from "./utils";
+import { getRandomInteger } from "../utils/randomInteger";
 
 export const imageDescriptions = Array.from({ length: 25 }, (_, i) => {
   const postNumber = i + 1;

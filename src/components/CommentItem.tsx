@@ -1,4 +1,4 @@
-import type { Comment } from "./type";
+import type { Comment } from "../types/types";
 
 type CommentItemProps = {
   commentProps: Comment;

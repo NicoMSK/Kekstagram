@@ -1,5 +1,5 @@
 import { CommentItem } from "./CommentItem";
-import type { Post } from "./type";
+import type { Post } from "../types/types";
 
 type CommentListProps = {
   commentsAmount: number;
