@@ -1,13 +1,14 @@
 import { createContext } from "react";
+import type { ModalType } from "../types/types";
 
 type ModalContextType = {
-  isOpen: boolean;
-  openModal: () => void;
+  isOpen: ModalType | null;
+  openModal: (value: ModalType) => void;
   closeModal: () => void;
 };
 
 export const ModalContext = createContext<ModalContextType>({
-  isOpen: false,
+  isOpen: null,
   openModal: () => {},
   closeModal: () => {},
 });

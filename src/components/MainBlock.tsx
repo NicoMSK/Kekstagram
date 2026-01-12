@@ -82,14 +82,16 @@ export function MainBlock() {
               likesAmount={item.likeAmount}
               onClick={() => {
                 setSelectedPostId(item.id);
-                openModal();
+                openModal("openImage");
               }}
             />
           );
         })}
       </section>
       <section
-        className={`big-picture  overlay  ${!isOpen && "hidden"}`}
+        className={`big-picture  overlay  ${
+          isOpen !== "openImage" && "hidden"
+        }`}
         onClick={(e) => e.currentTarget === e.target && closeModal()}
       >
         <h2 className="big-picture__title  visually-hidden">
@@ -98,9 +100,7 @@ export function MainBlock() {
         {selectedPost && (
           <FullScreenImageDisplay
             selectedPost={selectedPost}
-            onCloseModalWindow={() => {
-              closeModal();
-            }}
+            onCloseModalWindow={closeModal}
             heroImgUrl={selectedPost.heroImgUrl}
             heroImgAlt={selectedPost.description}
             commentsAmount={selectedPost.comments.length}

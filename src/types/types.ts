@@ -19,3 +19,6 @@ export type Post = {
 };
 
 export type FilterStatus = "default" | "random" | "discussed";
+
+export type ModalType = "openImage" | "upLoadImage";
+export type ModalState = ModalType | null;
