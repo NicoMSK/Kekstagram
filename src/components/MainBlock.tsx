@@ -8,6 +8,7 @@ import { getNewComment } from "../data/getNewComment.ts";
 import { imageDescriptions } from "../data/imageDescriptionsArray.ts";
 import { getRandomInteger } from "../utils/randomInteger.ts";
 import type { FilterStatus } from "../types/types.ts";
+import { MAX_AVATAR, MIN_AVATAR } from "../constants/constants";
 
 export function MainBlock() {
   const [posts, setPosts] = useState(imageDescriptions);
@@ -15,6 +16,26 @@ export function MainBlock() {
   const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
 
   const selectedPost = posts.find((post) => post.id === selectedPostId);
+
+  function addNewPost(textAreaValue: string, authorName: string) {
+    setPosts((post) => {
+      const avatarIndex = getRandomInteger(MIN_AVATAR, MAX_AVATAR);
+
+      return [
+        {
+          id: crypto.randomUUID(),
+          authorNamePost: authorName,
+          authorAvatarPost: `src/img/avatar-${avatarIndex}.svg`,
+          heroImgUrl: "src/img/logo-background-2.jpg",
+          description: textAreaValue,
+          likeAmount: 0,
+          likeChecked: false,
+          comments: [],
+        },
+        ...post,
+      ];
+    });
+  }
 
   function addLikePost(id: string) {
     setPosts((prev) =>
@@ -71,7 +92,7 @@ export function MainBlock() {
         <h2 className="pictures__title  visually-hidden">
           Фотографии других пользователей
         </h2>
-        <UploadingNewImage />
+        <UploadingNewImage addNewPost={addNewPost} />
         {posts.map((item) => {
           return (
             <UsersImage

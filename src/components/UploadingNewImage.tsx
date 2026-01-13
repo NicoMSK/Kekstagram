@@ -1,10 +1,41 @@
+import { useState } from "react";
 import { useModal } from "../context/useModal.ts";
 import { useEscClose } from "../hooks/useEscClose";
 
-export function UploadingNewImage() {
-  const { isOpen, openModal, closeModal } = useModal();
+const COUNT_TEXT = 142;
 
-  useEscClose(closeModal);
+type UploadImageProp = {
+  addNewPost: (valueTextArea: string, authorName: string) => void;
+};
+
+export function UploadingNewImage(props: UploadImageProp) {
+  const { isOpen, openModal, closeModal } = useModal();
+  const [textareaValue, setTextareaValue] = useState("");
+  const [authorName, setAuthorName] = useState("");
+  const [emptyValue, setEmptyValue] = useState(false);
+  const { addNewPost } = props;
+
+  const textareaError = textareaValue.length > COUNT_TEXT;
+
+  function closeModalNewPost() {
+    setTextareaValue("");
+    setAuthorName("");
+    setEmptyValue(false);
+    closeModal();
+  }
+
+  const handleAddNewPost = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (authorName.trim().length === 0 || textareaValue.trim().length === 0) {
+      setEmptyValue(true);
+      return;
+    }
+    addNewPost(textareaValue, authorName);
+    closeModalNewPost();
+  };
+
+  useEscClose(closeModalNewPost);
 
   return (
     <section className="img-upload">
@@ -16,6 +47,7 @@ export function UploadingNewImage() {
           className="img-upload__form"
           id="upload-select-image"
           autoComplete="off"
+          onSubmit={(e) => handleAddNewPost(e)}
         >
           <fieldset className="img-upload__start">
             <input
@@ -37,7 +69,7 @@ export function UploadingNewImage() {
             className={`img-upload__overlay  ${
               isOpen !== "upLoadImage" && "hidden"
             }`}
-            onClick={(e) => e.currentTarget === e.target && closeModal()}
+            onClick={(e) => e.currentTarget === e.target && closeModalNewPost()}
           >
             <div className="img-upload__wrapper">
               <div className="img-upload__preview-container">
@@ -65,7 +97,7 @@ export function UploadingNewImage() {
                 </fieldset>
                 <div className="img-upload__preview">
                   <img
-                    src="#"
+                    src="src/img/logo-background-2.jpg"
                     alt="Предварительный просмотр фотографии"
                   />
                 </div>
@@ -83,7 +115,7 @@ export function UploadingNewImage() {
                   className="img-upload__cancel  cancel"
                   type="reset"
                   id="upload-cancel"
-                  onClick={closeModal}
+                  onClick={closeModalNewPost}
                 >
                   Закрыть
                 </button>
@@ -206,21 +238,42 @@ export function UploadingNewImage() {
                   <input
                     className="text__hashtags"
                     name="hashtags"
-                    placeholder="#ХэшТег"
+                    placeholder="Ваше имя..."
+                    value={authorName}
+                    onChange={(e) => {
+                      setAuthorName(e.target.value);
+                    }}
                   />
+                  {emptyValue && (
+                    <span className="text__hashtags-error">
+                      Поле Имя или описание не может быть пустым
+                    </span>
+                  )}
                 </div>
                 <div className="img-upload__field-wrapper">
                   <textarea
                     className="text__description"
                     name="description"
-                    placeholder="Ваш комментарий..."
+                    placeholder="Ваше описание..."
+                    value={textareaValue}
+                    onChange={(e) => {
+                      setTextareaValue(e.target.value);
+                    }}
                   ></textarea>
+                  <span
+                    className={`text__count ${
+                      textareaError && "text__count--error"
+                    }`}
+                  >
+                    {textareaValue.length}/{COUNT_TEXT} символов
+                  </span>
                 </div>
               </fieldset>
               <button
                 className="img-upload__submit"
                 type="submit"
                 id="upload-submit"
+                disabled={textareaError}
               >
                 Опубликовать
               </button>
