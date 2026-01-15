@@ -2,40 +2,40 @@ import { useState } from "react";
 import { useModal } from "../context/useModal.ts";
 import { useEscClose } from "../hooks/useEscClose";
 
-const COUNT_TEXT = 142;
+const MAX_TEXT_LENGTH = 142;
 
 type UploadImageProp = {
-  addNewPost: (valueTextArea: string, authorName: string) => void;
+  addNewPost: (textAreaValue: string, authorName: string) => void;
 };
 
 export function UploadingNewImage(props: UploadImageProp) {
-  const { isOpen, openModal, closeModal } = useModal();
+  const { curOpenModel, openModal, closeModal } = useModal();
   const [textareaValue, setTextareaValue] = useState("");
   const [authorName, setAuthorName] = useState("");
-  const [emptyValue, setEmptyValue] = useState(false);
+  const [isEmptyValue, setIsEmptyValue] = useState(false);
   const { addNewPost } = props;
 
-  const textareaError = textareaValue.length > COUNT_TEXT;
+  const isTextareaError = textareaValue.length > MAX_TEXT_LENGTH;
 
   function closeModalNewPost() {
     setTextareaValue("");
     setAuthorName("");
-    setEmptyValue(false);
+    setIsEmptyValue(false);
     closeModal();
   }
+
+  useEscClose(closeModalNewPost);
 
   const handleAddNewPost = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (authorName.trim().length === 0 || textareaValue.trim().length === 0) {
-      setEmptyValue(true);
+      setIsEmptyValue(true);
       return;
     }
     addNewPost(textareaValue, authorName);
     closeModalNewPost();
   };
-
-  useEscClose(closeModalNewPost);
 
   return (
     <section className="img-upload">
@@ -67,7 +67,7 @@ export function UploadingNewImage(props: UploadImageProp) {
           </fieldset>
           <div
             className={`img-upload__overlay  ${
-              isOpen !== "upLoadImage" && "hidden"
+              curOpenModel !== "upLoadImage" && "hidden"
             }`}
             onClick={(e) => e.currentTarget === e.target && closeModalNewPost()}
           >
@@ -244,7 +244,7 @@ export function UploadingNewImage(props: UploadImageProp) {
                       setAuthorName(e.target.value);
                     }}
                   />
-                  {emptyValue && (
+                  {isEmptyValue && (
                     <span className="text__hashtags-error">
                       Поле Имя или описание не может быть пустым
                     </span>
@@ -262,10 +262,10 @@ export function UploadingNewImage(props: UploadImageProp) {
                   ></textarea>
                   <span
                     className={`text__count ${
-                      textareaError && "text__count--error"
+                      isTextareaError && "text__count--error"
                     }`}
                   >
-                    {textareaValue.length}/{COUNT_TEXT} символов
+                    {textareaValue.length}/{MAX_TEXT_LENGTH} символов
                   </span>
                 </div>
               </fieldset>
@@ -273,7 +273,7 @@ export function UploadingNewImage(props: UploadImageProp) {
                 className="img-upload__submit"
                 type="submit"
                 id="upload-submit"
-                disabled={textareaError}
+                disabled={isTextareaError}
               >
                 Опубликовать
               </button>

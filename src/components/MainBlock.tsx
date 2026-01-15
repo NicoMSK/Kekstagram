@@ -12,13 +12,13 @@ import { MAX_AVATAR, MIN_AVATAR } from "../constants/constants";
 
 export function MainBlock() {
   const [posts, setPosts] = useState(imageDescriptions);
-  const { isOpen, openModal, closeModal } = useModal();
+  const { curOpenModel, openModal, closeModal } = useModal();
   const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
 
   const selectedPost = posts.find((post) => post.id === selectedPostId);
 
   function addNewPost(textAreaValue: string, authorName: string) {
-    setPosts((post) => {
+    setPosts((posts) => {
       const avatarIndex = getRandomInteger(MIN_AVATAR, MAX_AVATAR);
 
       return [
@@ -32,7 +32,7 @@ export function MainBlock() {
           likeChecked: false,
           comments: [],
         },
-        ...post,
+        ...posts,
       ];
     });
   }
@@ -111,7 +111,7 @@ export function MainBlock() {
       </section>
       <section
         className={`big-picture  overlay  ${
-          isOpen !== "openImage" && "hidden"
+          curOpenModel !== "openImage" && "hidden"
         }`}
         onClick={(e) => e.currentTarget === e.target && closeModal()}
       >
