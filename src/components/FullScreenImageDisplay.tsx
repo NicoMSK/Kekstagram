@@ -37,6 +37,7 @@ export function FullScreenImageDisplay(props: ScreenImageProp) {
   const [curShownCommentsAmount, setCurShownCommentsAmount] = useState(
     Math.min(commentsAmount, LIMIT_SHOWING_NUMBER_COMMENTS)
   );
+
   const [inputValue, setInputValue] = useState("");
 
   const handleAddComment = (event: React.FormEvent<HTMLFormElement>) => {
@@ -75,7 +76,7 @@ export function FullScreenImageDisplay(props: ScreenImageProp) {
             <img
               className="social__picture"
               src={authorAvatarSvg}
-              alt={heroImgAlt}
+              alt={authorName}
               width="35"
               height="35"
             />

@@ -1,23 +1,41 @@
 import { useState } from "react";
+import { useModal } from "../context/useModal.ts";
+import { useEscClose } from "../hooks/useEscClose";
 
-export function UploadingNewImage() {
-  const [editImage, setEditImage] = useState(false);
+const MAX_TEXT_LENGTH = 142;
 
-  // function openImageEditing() {
-  //   document.body.classList.add("modal-open");
-  //   setEditImage(true);
-  // }
+type UploadImageProp = {
+  addNewPost: (textAreaValue: string, authorName: string) => void;
+};
 
-  function closeEditingWindow() {
-    document.body.classList.remove("modal-open");
-    setEditImage(false);
+export function UploadingNewImage(props: UploadImageProp) {
+  const { curOpenModel, openModal, closeModal } = useModal();
+  const [textareaValue, setTextareaValue] = useState("");
+  const [authorName, setAuthorName] = useState("");
+  const [isEmptyValue, setIsEmptyValue] = useState(false);
+  const { addNewPost } = props;
+
+  const isTextareaError = textareaValue.length > MAX_TEXT_LENGTH;
+
+  function closeModalNewPost() {
+    setTextareaValue("");
+    setAuthorName("");
+    setIsEmptyValue(false);
+    closeModal();
   }
 
-  // function closeEditingWindowEsc(event: React.KeyboardEvent<HTMLInputElement>) {
-  //   if (event.key === "Escape") {
-  //     closeEditingWindow();
-  //   }
-  // }
+  useEscClose(closeModalNewPost);
+
+  const handleAddNewPost = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (authorName.trim().length === 0 || textareaValue.trim().length === 0) {
+      setIsEmptyValue(true);
+      return;
+    }
+    addNewPost(textareaValue, authorName);
+    closeModalNewPost();
+  };
 
   return (
     <section className="img-upload">
@@ -29,6 +47,7 @@ export function UploadingNewImage() {
           className="img-upload__form"
           id="upload-select-image"
           autoComplete="off"
+          onSubmit={(e) => handleAddNewPost(e)}
         >
           <fieldset className="img-upload__start">
             <input
@@ -37,11 +56,7 @@ export function UploadingNewImage() {
               id="upload-file"
               name="filename"
               required
-              // onChange={
-              //   // closeOnBackDropClick(e);
-              //   openImageEditing();
-              // }
-              // onKeyDown={closeEditingWindowEsc}
+              onChange={() => openModal("upLoadImage")}
             />
             <label
               className="img-upload__label  img-upload__control"
@@ -50,7 +65,12 @@ export function UploadingNewImage() {
               Загрузить
             </label>
           </fieldset>
-          <div className={`img-upload__overlay  ${editImage ? "" : "hidden"}`}>
+          <div
+            className={`img-upload__overlay  ${
+              curOpenModel !== "upLoadImage" && "hidden"
+            }`}
+            onClick={(e) => e.currentTarget === e.target && closeModalNewPost()}
+          >
             <div className="img-upload__wrapper">
               <div className="img-upload__preview-container">
                 <fieldset className="img-upload__scale  scale">
@@ -76,7 +96,10 @@ export function UploadingNewImage() {
                   </button>
                 </fieldset>
                 <div className="img-upload__preview">
-                  <img src="#" alt="Предварительный просмотр фотографии" />
+                  <img
+                    src="src/img/logo-background-2.jpg"
+                    alt="Предварительный просмотр фотографии"
+                  />
                 </div>
                 <fieldset className="img-upload__effect-level  effect-level">
                   <input
@@ -92,7 +115,7 @@ export function UploadingNewImage() {
                   className="img-upload__cancel  cancel"
                   type="reset"
                   id="upload-cancel"
-                  onClick={closeEditingWindow}
+                  onClick={closeModalNewPost}
                 >
                   Закрыть
                 </button>
@@ -108,7 +131,10 @@ export function UploadingNewImage() {
                       value="none"
                       // checked
                     />
-                    <label className="effects__label" htmlFor="effect-none">
+                    <label
+                      className="effects__label"
+                      htmlFor="effect-none"
+                    >
                       <span className="effects__preview  effects__preview--none">
                         Превью фото без эффекта
                       </span>
@@ -123,7 +149,10 @@ export function UploadingNewImage() {
                       id="effect-chrome"
                       value="chrome"
                     />
-                    <label className="effects__label" htmlFor="effect-chrome">
+                    <label
+                      className="effects__label"
+                      htmlFor="effect-chrome"
+                    >
                       <span className="effects__preview  effects__preview--chrome">
                         Превью эффекта Хром
                       </span>
@@ -138,7 +167,10 @@ export function UploadingNewImage() {
                       id="effect-sepia"
                       value="sepia"
                     />
-                    <label className="effects__label" htmlFor="effect-sepia">
+                    <label
+                      className="effects__label"
+                      htmlFor="effect-sepia"
+                    >
                       <span className="effects__preview  effects__preview--sepia">
                         Превью эффекта Сепия
                       </span>
@@ -153,7 +185,10 @@ export function UploadingNewImage() {
                       id="effect-marvin"
                       value="marvin"
                     />
-                    <label className="effects__label" htmlFor="effect-marvin">
+                    <label
+                      className="effects__label"
+                      htmlFor="effect-marvin"
+                    >
                       <span className="effects__preview  effects__preview--marvin">
                         Превью эффекта Марвин
                       </span>
@@ -168,7 +203,10 @@ export function UploadingNewImage() {
                       id="effect-phobos"
                       value="phobos"
                     />
-                    <label className="effects__label" htmlFor="effect-phobos">
+                    <label
+                      className="effects__label"
+                      htmlFor="effect-phobos"
+                    >
                       <span className="effects__preview  effects__preview--phobos">
                         Превью эффекта Фобос
                       </span>
@@ -183,7 +221,10 @@ export function UploadingNewImage() {
                       id="effect-heat"
                       value="heat"
                     />
-                    <label className="effects__label" htmlFor="effect-heat">
+                    <label
+                      className="effects__label"
+                      htmlFor="effect-heat"
+                    >
                       <span className="effects__preview  effects__preview--heat">
                         Превью эффекта Зной
                       </span>
@@ -197,21 +238,42 @@ export function UploadingNewImage() {
                   <input
                     className="text__hashtags"
                     name="hashtags"
-                    placeholder="#ХэшТег"
+                    placeholder="Ваше имя..."
+                    value={authorName}
+                    onChange={(e) => {
+                      setAuthorName(e.target.value);
+                    }}
                   />
+                  {isEmptyValue && (
+                    <span className="text__hashtags-error">
+                      Поле Имя или описание не может быть пустым
+                    </span>
+                  )}
                 </div>
                 <div className="img-upload__field-wrapper">
                   <textarea
                     className="text__description"
                     name="description"
-                    placeholder="Ваш комментарий..."
+                    placeholder="Ваше описание..."
+                    value={textareaValue}
+                    onChange={(e) => {
+                      setTextareaValue(e.target.value);
+                    }}
                   ></textarea>
+                  <span
+                    className={`text__count ${
+                      isTextareaError && "text__count--error"
+                    }`}
+                  >
+                    {textareaValue.length}/{MAX_TEXT_LENGTH} символов
+                  </span>
                 </div>
               </fieldset>
               <button
                 className="img-upload__submit"
                 type="submit"
                 id="upload-submit"
+                disabled={isTextareaError}
               >
                 Опубликовать
               </button>

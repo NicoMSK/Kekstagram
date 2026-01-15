@@ -8,13 +8,34 @@ import { getNewComment } from "../data/getNewComment.ts";
 import { imageDescriptions } from "../data/imageDescriptionsArray.ts";
 import { getRandomInteger } from "../utils/randomInteger.ts";
 import type { FilterStatus } from "../types/types.ts";
+import { MAX_AVATAR, MIN_AVATAR } from "../constants/constants";
 
 export function MainBlock() {
   const [posts, setPosts] = useState(imageDescriptions);
-  const { isOpen, openModal, closeModal } = useModal();
+  const { curOpenModel, openModal, closeModal } = useModal();
   const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
 
   const selectedPost = posts.find((post) => post.id === selectedPostId);
+
+  function addNewPost(textAreaValue: string, authorName: string) {
+    setPosts((posts) => {
+      const avatarIndex = getRandomInteger(MIN_AVATAR, MAX_AVATAR);
+
+      return [
+        {
+          id: crypto.randomUUID(),
+          authorNamePost: authorName,
+          authorAvatarPost: `src/img/avatar-${avatarIndex}.svg`,
+          heroImgUrl: "src/img/logo-background-2.jpg",
+          description: textAreaValue,
+          likeAmount: 0,
+          likeChecked: false,
+          comments: [],
+        },
+        ...posts,
+      ];
+    });
+  }
 
   function addLikePost(id: string) {
     setPosts((prev) =>
@@ -71,7 +92,7 @@ export function MainBlock() {
         <h2 className="pictures__title  visually-hidden">
           Фотографии других пользователей
         </h2>
-        <UploadingNewImage />
+        <UploadingNewImage addNewPost={addNewPost} />
         {posts.map((item) => {
           return (
             <UsersImage
@@ -82,14 +103,16 @@ export function MainBlock() {
               likesAmount={item.likeAmount}
               onClick={() => {
                 setSelectedPostId(item.id);
-                openModal();
+                openModal("openImage");
               }}
             />
           );
         })}
       </section>
       <section
-        className={`big-picture  overlay  ${!isOpen && "hidden"}`}
+        className={`big-picture  overlay  ${
+          curOpenModel !== "openImage" && "hidden"
+        }`}
         onClick={(e) => e.currentTarget === e.target && closeModal()}
       >
         <h2 className="big-picture__title  visually-hidden">
@@ -98,9 +121,7 @@ export function MainBlock() {
         {selectedPost && (
           <FullScreenImageDisplay
             selectedPost={selectedPost}
-            onCloseModalWindow={() => {
-              closeModal();
-            }}
+            onCloseModalWindow={closeModal}
             heroImgUrl={selectedPost.heroImgUrl}
             heroImgAlt={selectedPost.description}
             commentsAmount={selectedPost.comments.length}
