@@ -469,15 +469,22 @@ main {
 
   width: 600px;
   height: 600px;
+  overflow: hidden;
 
   background-color: #ffffff;
 }
 
 .img-upload__preview img {
   display: block;
-  width: 100%;
+  /* width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: cover; */
+
+  width: auto;
+  height: auto;
+  max-width: none;
+  max-height: none;
+  transform-origin: center;
 }
 
 .effect-level {

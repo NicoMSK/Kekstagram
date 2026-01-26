@@ -3,6 +3,8 @@ import { useModal } from "../context/useModal.ts";
 import { useEscClose } from "../hooks/useEscClose";
 
 const MAX_TEXT_LENGTH = 142;
+const DEFAULT_SCALE = 100;
+const SCALE_STEP = 25;
 
 type UploadImageProp = {
   addNewPost: (
@@ -17,7 +19,7 @@ export function UploadingNewImage(props: UploadImageProp) {
   const [textareaValue, setTextareaValue] = useState("");
   const [authorName, setAuthorName] = useState("");
   const [urlImage, setUrlImage] = useState<string | null>(null);
-  const [scaleControlValue, setScaleControlValue] = useState(100);
+  const [scaleControlValue, setScaleControlValue] = useState(DEFAULT_SCALE);
   const [isEmptyValue, setIsEmptyValue] = useState(false);
   const { addNewPost } = props;
 
@@ -26,6 +28,7 @@ export function UploadingNewImage(props: UploadImageProp) {
   function closeModalNewPost() {
     setTextareaValue("");
     setAuthorName("");
+    setScaleControlValue(100);
     setIsEmptyValue(false);
     closeModal();
   }
@@ -71,12 +74,18 @@ export function UploadingNewImage(props: UploadImageProp) {
 
   function scaleControlImage(buttonType: string) {
     if (buttonType === "smaller") {
-      if (scaleControlValue > 25 && scaleControlValue <= 100) {
-        setScaleControlValue((prev) => prev - 25);
+      if (
+        scaleControlValue > SCALE_STEP &&
+        scaleControlValue <= DEFAULT_SCALE
+      ) {
+        setScaleControlValue((prev) => prev - SCALE_STEP);
       }
     } else {
-      if (scaleControlValue <= 100 && scaleControlValue !== 100) {
-        setScaleControlValue((prev) => prev + 25);
+      if (
+        scaleControlValue <= DEFAULT_SCALE &&
+        scaleControlValue !== DEFAULT_SCALE
+      ) {
+        setScaleControlValue((prev) => prev + SCALE_STEP);
       }
     }
   }
@@ -142,7 +151,12 @@ export function UploadingNewImage(props: UploadImageProp) {
                   </button>
                 </fieldset>
                 <div className="img-upload__preview">
-                  {urlImage && <img src={urlImage} />}
+                  {urlImage && (
+                    <img
+                      src={urlImage}
+                      style={{ transform: `scale(${scaleControlValue / 100})` }}
+                    />
+                  )}
                 </div>
                 <fieldset className="img-upload__effect-level  effect-level">
                   <input
