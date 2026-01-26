@@ -17,6 +17,7 @@ export function UploadingNewImage(props: UploadImageProp) {
   const [textareaValue, setTextareaValue] = useState("");
   const [authorName, setAuthorName] = useState("");
   const [urlImage, setUrlImage] = useState<string | null>(null);
+  const [scaleControlValue, setScaleControlValue] = useState(100);
   const [isEmptyValue, setIsEmptyValue] = useState(false);
   const { addNewPost } = props;
 
@@ -68,6 +69,18 @@ export function UploadingNewImage(props: UploadImageProp) {
     closeModalNewPost();
   };
 
+  function scaleControlImage(buttonType: string) {
+    if (buttonType === "smaller") {
+      if (scaleControlValue > 25 && scaleControlValue <= 100) {
+        setScaleControlValue((prev) => prev - 25);
+      }
+    } else {
+      if (scaleControlValue <= 100 && scaleControlValue !== 100) {
+        setScaleControlValue((prev) => prev + 25);
+      }
+    }
+  }
+
   return (
     <section className="img-upload">
       <div className="img-upload__wrapper">
@@ -108,13 +121,14 @@ export function UploadingNewImage(props: UploadImageProp) {
                   <button
                     className="scale__control  scale__control--smaller"
                     type="button"
+                    onClick={() => scaleControlImage("smaller")}
                   >
                     Уменьшить
                   </button>
                   <input
                     className="scale__control  scale__control--value"
                     type="text"
-                    value="100%"
+                    value={`${scaleControlValue} %`}
                     title="Image Scale"
                     name="scale"
                     readOnly
@@ -122,6 +136,7 @@ export function UploadingNewImage(props: UploadImageProp) {
                   <button
                     className="scale__control  scale__control--bigger"
                     type="button"
+                    onClick={() => scaleControlImage("bigger")}
                   >
                     Увеличить
                   </button>
