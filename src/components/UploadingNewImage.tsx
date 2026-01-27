@@ -14,12 +14,21 @@ type UploadImageProp = {
   ) => void;
 };
 
+type FilterOptions =
+  | "none"
+  | "grayscale"
+  | "sepia"
+  | "invert"
+  | "blur"
+  | "brightness";
+
 export function UploadingNewImage(props: UploadImageProp) {
   const { curOpenModel, openModal, closeModal } = useModal();
   const [textareaValue, setTextareaValue] = useState("");
   const [authorName, setAuthorName] = useState("");
   const [urlImage, setUrlImage] = useState<string | null>(null);
   const [scaleControlValue, setScaleControlValue] = useState(DEFAULT_SCALE);
+  const [effectImage, setEffectImage] = useState("none");
   const [isEmptyValue, setIsEmptyValue] = useState(false);
   const { addNewPost } = props;
 
@@ -28,8 +37,9 @@ export function UploadingNewImage(props: UploadImageProp) {
   function closeModalNewPost() {
     setTextareaValue("");
     setAuthorName("");
-    setScaleControlValue(100);
+    setScaleControlValue(DEFAULT_SCALE);
     setIsEmptyValue(false);
+    setEffectImage("none");
     closeModal();
   }
 
@@ -88,6 +98,19 @@ export function UploadingNewImage(props: UploadImageProp) {
         setScaleControlValue((prev) => prev + SCALE_STEP);
       }
     }
+  }
+
+  function changeImageEffect(effectType: FilterOptions) {
+    const effects = {
+      none: "none",
+      grayscale: "grayscale(1)",
+      sepia: "sepia(1)",
+      invert: "invert(100%)",
+      blur: "blur(10px)",
+      brightness: "brightness(3)",
+    };
+
+    setEffectImage(effects[effectType]);
   }
 
   return (
@@ -154,7 +177,10 @@ export function UploadingNewImage(props: UploadImageProp) {
                   {urlImage && (
                     <img
                       src={urlImage}
-                      style={{ transform: `scale(${scaleControlValue / 100})` }}
+                      style={{
+                        transform: `scale(${scaleControlValue / 100})`,
+                        filter: `${effectImage}`,
+                      }}
                     />
                   )}
                 </div>
@@ -164,7 +190,7 @@ export function UploadingNewImage(props: UploadImageProp) {
                     type="number"
                     step="any"
                     name="effect-level"
-                    // value=""
+                    value=""
                   />
                   <div className="effect-level__slider"></div>
                 </fieldset>
@@ -186,7 +212,8 @@ export function UploadingNewImage(props: UploadImageProp) {
                       name="effect"
                       id="effect-none"
                       value="none"
-                      // checked
+                      checked={effectImage === "none"}
+                      onChange={() => changeImageEffect("none")}
                     />
                     <label
                       className="effects__label"
@@ -205,6 +232,8 @@ export function UploadingNewImage(props: UploadImageProp) {
                       name="effect"
                       id="effect-chrome"
                       value="chrome"
+                      checked={effectImage === "grayscale"}
+                      onChange={() => changeImageEffect("grayscale")}
                     />
                     <label
                       className="effects__label"
@@ -223,6 +252,8 @@ export function UploadingNewImage(props: UploadImageProp) {
                       name="effect"
                       id="effect-sepia"
                       value="sepia"
+                      checked={effectImage === "sepia"}
+                      onChange={() => changeImageEffect("sepia")}
                     />
                     <label
                       className="effects__label"
@@ -241,6 +272,8 @@ export function UploadingNewImage(props: UploadImageProp) {
                       name="effect"
                       id="effect-marvin"
                       value="marvin"
+                      checked={effectImage === "invert"}
+                      onChange={() => changeImageEffect("invert")}
                     />
                     <label
                       className="effects__label"
@@ -259,6 +292,8 @@ export function UploadingNewImage(props: UploadImageProp) {
                       name="effect"
                       id="effect-phobos"
                       value="phobos"
+                      checked={effectImage === "blur"}
+                      onChange={() => changeImageEffect("blur")}
                     />
                     <label
                       className="effects__label"
@@ -277,6 +312,8 @@ export function UploadingNewImage(props: UploadImageProp) {
                       name="effect"
                       id="effect-heat"
                       value="heat"
+                      checked={effectImage === "brightness"}
+                      onChange={() => changeImageEffect("brightness")}
                     />
                     <label
                       className="effects__label"
