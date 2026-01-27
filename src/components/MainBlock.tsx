@@ -17,7 +17,11 @@ export function MainBlock() {
 
   const selectedPost = posts.find((post) => post.id === selectedPostId);
 
-  function addNewPost(textAreaValue: string, authorName: string) {
+  function addNewPost(
+    textAreaValue: string,
+    authorName: string,
+    urlImage: string,
+  ) {
     setPosts((posts) => {
       const avatarIndex = getRandomInteger(MIN_AVATAR, MAX_AVATAR);
 
@@ -26,7 +30,7 @@ export function MainBlock() {
           id: crypto.randomUUID(),
           authorNamePost: authorName,
           authorAvatarPost: `src/img/avatar-${avatarIndex}.svg`,
-          heroImgUrl: "src/img/logo-background-2.jpg",
+          heroImgUrl: urlImage,
           description: textAreaValue,
           likeAmount: 0,
           likeChecked: false,
@@ -48,7 +52,7 @@ export function MainBlock() {
           };
         }
         return { ...post };
-      })
+      }),
     );
   }
 
@@ -64,7 +68,7 @@ export function MainBlock() {
           };
         }
         return { ...post };
-      })
+      }),
     );
   }
 
@@ -75,7 +79,7 @@ export function MainBlock() {
       }
       if (currentFilter === "discussed") {
         return prev.toSorted(
-          (post1, postN) => postN.comments.length - post1.comments.length
+          (post1, postN) => postN.comments.length - post1.comments.length,
         );
       }
       if (currentFilter === "random") {

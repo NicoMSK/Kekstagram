@@ -5,13 +5,18 @@ import { useEscClose } from "../hooks/useEscClose";
 const MAX_TEXT_LENGTH = 142;
 
 type UploadImageProp = {
-  addNewPost: (textAreaValue: string, authorName: string) => void;
+  addNewPost: (
+    textAreaValue: string,
+    authorName: string,
+    urlImage: string,
+  ) => void;
 };
 
 export function UploadingNewImage(props: UploadImageProp) {
   const { curOpenModel, openModal, closeModal } = useModal();
   const [textareaValue, setTextareaValue] = useState("");
   const [authorName, setAuthorName] = useState("");
+  const [urlImage, setUrlImage] = useState<string | null>(null);
   const [isEmptyValue, setIsEmptyValue] = useState(false);
   const { addNewPost } = props;
 
@@ -26,6 +31,26 @@ export function UploadingNewImage(props: UploadImageProp) {
 
   useEscClose(closeModalNewPost);
 
+  function loadingNewImage(event: React.ChangeEvent<HTMLInputElement>) {
+    const reader = new FileReader();
+    const files = event.target.files;
+
+    reader.onload = function () {
+      if (typeof reader.result === "string") {
+        setUrlImage(reader.result);
+      }
+    };
+
+    if (!files || files.length === 0) return;
+
+    reader.readAsDataURL(files[0]);
+  }
+
+  function handleImageUpload(event: React.ChangeEvent<HTMLInputElement>) {
+    openModal("upLoadImage");
+    loadingNewImage(event);
+  }
+
   const handleAddNewPost = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -33,7 +58,13 @@ export function UploadingNewImage(props: UploadImageProp) {
       setIsEmptyValue(true);
       return;
     }
-    addNewPost(textareaValue, authorName);
+
+    if (!urlImage) {
+      console.error("Картинка не найдена");
+      return;
+    }
+
+    addNewPost(textareaValue, authorName, urlImage);
     closeModalNewPost();
   };
 
@@ -56,7 +87,7 @@ export function UploadingNewImage(props: UploadImageProp) {
               id="upload-file"
               name="filename"
               required
-              onChange={() => openModal("upLoadImage")}
+              onChange={(e) => handleImageUpload(e)}
             />
             <label
               className="img-upload__label  img-upload__control"
@@ -96,10 +127,7 @@ export function UploadingNewImage(props: UploadImageProp) {
                   </button>
                 </fieldset>
                 <div className="img-upload__preview">
-                  <img
-                    src="src/img/logo-background-2.jpg"
-                    alt="Предварительный просмотр фотографии"
-                  />
+                  {urlImage && <img src={urlImage} />}
                 </div>
                 <fieldset className="img-upload__effect-level  effect-level">
                   <input
