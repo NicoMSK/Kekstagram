@@ -6,6 +6,19 @@ const MAX_TEXT_LENGTH = 142;
 const DEFAULT_SCALE = 100;
 const SCALE_STEP = 25;
 
+const EFFECTS = {
+  none: "none",
+  grayscale: "grayscale(1)",
+  sepia: "sepia(1)",
+  invert: "invert(100%)",
+  blur: "blur(10px)",
+  brightness: "brightness(3)",
+};
+
+type FilterOptions = keyof typeof EFFECTS;
+
+type ButtonType = "smaller" | "bigger";
+
 type UploadImageProp = {
   addNewPost: (
     textAreaValue: string,
@@ -13,14 +26,6 @@ type UploadImageProp = {
     urlImage: string,
   ) => void;
 };
-
-type FilterOptions =
-  | "none"
-  | "grayscale"
-  | "sepia"
-  | "invert"
-  | "blur"
-  | "brightness";
 
 export function UploadingNewImage(props: UploadImageProp) {
   const { curOpenModel, openModal, closeModal } = useModal();
@@ -82,7 +87,7 @@ export function UploadingNewImage(props: UploadImageProp) {
     closeModalNewPost();
   };
 
-  function scaleControlImage(buttonType: string) {
+  function scaleControlImage(buttonType: ButtonType) {
     if (buttonType === "smaller") {
       if (
         scaleControlValue > SCALE_STEP &&
@@ -101,16 +106,7 @@ export function UploadingNewImage(props: UploadImageProp) {
   }
 
   function changeImageEffect(effectType: FilterOptions) {
-    const effects = {
-      none: "none",
-      grayscale: "grayscale(1)",
-      sepia: "sepia(1)",
-      invert: "invert(100%)",
-      blur: "blur(10px)",
-      brightness: "brightness(3)",
-    };
-
-    setEffectImage(effects[effectType]);
+    setEffectImage(EFFECTS[effectType]);
   }
 
   return (
@@ -184,16 +180,6 @@ export function UploadingNewImage(props: UploadImageProp) {
                     />
                   )}
                 </div>
-                <fieldset className="img-upload__effect-level  effect-level">
-                  <input
-                    className="effect-level__value"
-                    type="number"
-                    step="any"
-                    name="effect-level"
-                    value=""
-                  />
-                  <div className="effect-level__slider"></div>
-                </fieldset>
                 <button
                   className="img-upload__cancel  cancel"
                   type="reset"
@@ -232,7 +218,7 @@ export function UploadingNewImage(props: UploadImageProp) {
                       name="effect"
                       id="effect-chrome"
                       value="chrome"
-                      checked={effectImage === "grayscale"}
+                      checked={effectImage === "grayscale(1)"}
                       onChange={() => changeImageEffect("grayscale")}
                     />
                     <label
@@ -252,7 +238,7 @@ export function UploadingNewImage(props: UploadImageProp) {
                       name="effect"
                       id="effect-sepia"
                       value="sepia"
-                      checked={effectImage === "sepia"}
+                      checked={effectImage === "sepia(1)"}
                       onChange={() => changeImageEffect("sepia")}
                     />
                     <label
@@ -272,7 +258,7 @@ export function UploadingNewImage(props: UploadImageProp) {
                       name="effect"
                       id="effect-marvin"
                       value="marvin"
-                      checked={effectImage === "invert"}
+                      checked={effectImage === "invert(100%)"}
                       onChange={() => changeImageEffect("invert")}
                     />
                     <label
@@ -292,7 +278,7 @@ export function UploadingNewImage(props: UploadImageProp) {
                       name="effect"
                       id="effect-phobos"
                       value="phobos"
-                      checked={effectImage === "blur"}
+                      checked={effectImage === "blur(10px)"}
                       onChange={() => changeImageEffect("blur")}
                     />
                     <label
@@ -312,7 +298,7 @@ export function UploadingNewImage(props: UploadImageProp) {
                       name="effect"
                       id="effect-heat"
                       value="heat"
-                      checked={effectImage === "brightness"}
+                      checked={effectImage === "brightness(3)"}
                       onChange={() => changeImageEffect("brightness")}
                     />
                     <label
