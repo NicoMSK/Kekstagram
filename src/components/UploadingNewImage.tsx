@@ -3,6 +3,21 @@ import { useModal } from "../context/useModal.ts";
 import { useEscClose } from "../hooks/useEscClose";
 
 const MAX_TEXT_LENGTH = 142;
+const DEFAULT_SCALE = 100;
+const SCALE_STEP = 25;
+
+const EFFECTS = {
+  none: "none",
+  grayscale: "grayscale(1)",
+  sepia: "sepia(1)",
+  invert: "invert(100%)",
+  blur: "blur(10px)",
+  brightness: "brightness(3)",
+};
+
+type FilterOptions = keyof typeof EFFECTS;
+
+type ButtonType = "smaller" | "bigger";
 
 type UploadImageProp = {
   addNewPost: (
@@ -17,6 +32,8 @@ export function UploadingNewImage(props: UploadImageProp) {
   const [textareaValue, setTextareaValue] = useState("");
   const [authorName, setAuthorName] = useState("");
   const [urlImage, setUrlImage] = useState<string | null>(null);
+  const [scaleControlValue, setScaleControlValue] = useState(DEFAULT_SCALE);
+  const [effectImage, setEffectImage] = useState("none");
   const [isEmptyValue, setIsEmptyValue] = useState(false);
   const { addNewPost } = props;
 
@@ -25,7 +42,9 @@ export function UploadingNewImage(props: UploadImageProp) {
   function closeModalNewPost() {
     setTextareaValue("");
     setAuthorName("");
+    setScaleControlValue(DEFAULT_SCALE);
     setIsEmptyValue(false);
+    setEffectImage("none");
     closeModal();
   }
 
@@ -68,6 +87,28 @@ export function UploadingNewImage(props: UploadImageProp) {
     closeModalNewPost();
   };
 
+  function scaleControlImage(buttonType: ButtonType) {
+    if (buttonType === "smaller") {
+      if (
+        scaleControlValue > SCALE_STEP &&
+        scaleControlValue <= DEFAULT_SCALE
+      ) {
+        setScaleControlValue((prev) => prev - SCALE_STEP);
+      }
+    } else {
+      if (
+        scaleControlValue <= DEFAULT_SCALE &&
+        scaleControlValue !== DEFAULT_SCALE
+      ) {
+        setScaleControlValue((prev) => prev + SCALE_STEP);
+      }
+    }
+  }
+
+  function changeImageEffect(effectType: FilterOptions) {
+    setEffectImage(EFFECTS[effectType]);
+  }
+
   return (
     <section className="img-upload">
       <div className="img-upload__wrapper">
@@ -108,13 +149,14 @@ export function UploadingNewImage(props: UploadImageProp) {
                   <button
                     className="scale__control  scale__control--smaller"
                     type="button"
+                    onClick={() => scaleControlImage("smaller")}
                   >
                     Уменьшить
                   </button>
                   <input
                     className="scale__control  scale__control--value"
                     type="text"
-                    value="100%"
+                    value={`${scaleControlValue} %`}
                     title="Image Scale"
                     name="scale"
                     readOnly
@@ -122,23 +164,22 @@ export function UploadingNewImage(props: UploadImageProp) {
                   <button
                     className="scale__control  scale__control--bigger"
                     type="button"
+                    onClick={() => scaleControlImage("bigger")}
                   >
                     Увеличить
                   </button>
                 </fieldset>
                 <div className="img-upload__preview">
-                  {urlImage && <img src={urlImage} />}
+                  {urlImage && (
+                    <img
+                      src={urlImage}
+                      style={{
+                        transform: `scale(${scaleControlValue / 100})`,
+                        filter: `${effectImage}`,
+                      }}
+                    />
+                  )}
                 </div>
-                <fieldset className="img-upload__effect-level  effect-level">
-                  <input
-                    className="effect-level__value"
-                    type="number"
-                    step="any"
-                    name="effect-level"
-                    // value=""
-                  />
-                  <div className="effect-level__slider"></div>
-                </fieldset>
                 <button
                   className="img-upload__cancel  cancel"
                   type="reset"
@@ -157,7 +198,8 @@ export function UploadingNewImage(props: UploadImageProp) {
                       name="effect"
                       id="effect-none"
                       value="none"
-                      // checked
+                      checked={effectImage === "none"}
+                      onChange={() => changeImageEffect("none")}
                     />
                     <label
                       className="effects__label"
@@ -176,6 +218,8 @@ export function UploadingNewImage(props: UploadImageProp) {
                       name="effect"
                       id="effect-chrome"
                       value="chrome"
+                      checked={effectImage === "grayscale(1)"}
+                      onChange={() => changeImageEffect("grayscale")}
                     />
                     <label
                       className="effects__label"
@@ -194,6 +238,8 @@ export function UploadingNewImage(props: UploadImageProp) {
                       name="effect"
                       id="effect-sepia"
                       value="sepia"
+                      checked={effectImage === "sepia(1)"}
+                      onChange={() => changeImageEffect("sepia")}
                     />
                     <label
                       className="effects__label"
@@ -212,6 +258,8 @@ export function UploadingNewImage(props: UploadImageProp) {
                       name="effect"
                       id="effect-marvin"
                       value="marvin"
+                      checked={effectImage === "invert(100%)"}
+                      onChange={() => changeImageEffect("invert")}
                     />
                     <label
                       className="effects__label"
@@ -230,6 +278,8 @@ export function UploadingNewImage(props: UploadImageProp) {
                       name="effect"
                       id="effect-phobos"
                       value="phobos"
+                      checked={effectImage === "blur(10px)"}
+                      onChange={() => changeImageEffect("blur")}
                     />
                     <label
                       className="effects__label"
@@ -248,6 +298,8 @@ export function UploadingNewImage(props: UploadImageProp) {
                       name="effect"
                       id="effect-heat"
                       value="heat"
+                      checked={effectImage === "brightness(3)"}
+                      onChange={() => changeImageEffect("brightness")}
                     />
                     <label
                       className="effects__label"
