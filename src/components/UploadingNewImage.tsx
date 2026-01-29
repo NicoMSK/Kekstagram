@@ -6,24 +6,28 @@ const MAX_TEXT_LENGTH = 142;
 const DEFAULT_SCALE = 100;
 const SCALE_STEP = 25;
 
-const EFFECTS = {
+export const EFFECTS = {
   none: "none",
   grayscale: "grayscale(1)",
   sepia: "sepia(1)",
   invert: "invert(100%)",
   blur: "blur(10px)",
   brightness: "brightness(3)",
-};
+} as const;
 
 type FilterOptions = keyof typeof EFFECTS;
+export type FilterValues = (typeof EFFECTS)[keyof typeof EFFECTS];
 
 type ButtonType = "smaller" | "bigger";
+export type ScaleType = 25 | 50 | 75 | 100;
 
 type UploadImageProp = {
   addNewPost: (
     textAreaValue: string,
     authorName: string,
     urlImage: string,
+    scaleControlValue: ScaleType,
+    effectImage: FilterValues,
   ) => void;
 };
 
@@ -32,8 +36,9 @@ export function UploadingNewImage(props: UploadImageProp) {
   const [textareaValue, setTextareaValue] = useState("");
   const [authorName, setAuthorName] = useState("");
   const [urlImage, setUrlImage] = useState<string | null>(null);
-  const [scaleControlValue, setScaleControlValue] = useState(DEFAULT_SCALE);
-  const [effectImage, setEffectImage] = useState("none");
+  const [scaleControlValue, setScaleControlValue] =
+    useState<ScaleType>(DEFAULT_SCALE);
+  const [effectImage, setEffectImage] = useState<FilterValues>(EFFECTS.none);
   const [isEmptyValue, setIsEmptyValue] = useState(false);
   const { addNewPost } = props;
 
@@ -83,7 +88,13 @@ export function UploadingNewImage(props: UploadImageProp) {
       return;
     }
 
-    addNewPost(textareaValue, authorName, urlImage);
+    addNewPost(
+      textareaValue,
+      authorName,
+      urlImage,
+      scaleControlValue,
+      effectImage,
+    );
     closeModalNewPost();
   };
 
@@ -93,14 +104,14 @@ export function UploadingNewImage(props: UploadImageProp) {
         scaleControlValue > SCALE_STEP &&
         scaleControlValue <= DEFAULT_SCALE
       ) {
-        setScaleControlValue((prev) => prev - SCALE_STEP);
+        setScaleControlValue((prev) => (prev - SCALE_STEP) as ScaleType);
       }
     } else {
       if (
         scaleControlValue <= DEFAULT_SCALE &&
         scaleControlValue !== DEFAULT_SCALE
       ) {
-        setScaleControlValue((prev) => prev + SCALE_STEP);
+        setScaleControlValue((prev) => (prev + SCALE_STEP) as ScaleType);
       }
     }
   }
@@ -173,6 +184,8 @@ export function UploadingNewImage(props: UploadImageProp) {
                   {urlImage && (
                     <img
                       src={urlImage}
+                      width="600"
+                      height="600"
                       style={{
                         transform: `scale(${scaleControlValue / 100})`,
                         filter: `${effectImage}`,

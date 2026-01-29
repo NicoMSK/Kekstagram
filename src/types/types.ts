@@ -1,3 +1,5 @@
+import type { FilterValues, ScaleType } from "../components/UploadingNewImage";
+
 export type Comment = {
   id: string;
   author: {
@@ -16,6 +18,8 @@ export type Post = {
   likeAmount: number;
   likeChecked: boolean;
   comments: Comment[];
+  scale: ScaleType;
+  filter: FilterValues;
 };
 
 export type FilterStatus = "default" | "random" | "discussed";

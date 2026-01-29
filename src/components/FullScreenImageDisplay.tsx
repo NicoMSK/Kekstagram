@@ -2,6 +2,7 @@ import type { Post } from "../types/types";
 import { useEscClose } from "../hooks/useEscClose";
 import { CommentList } from "./CommentList";
 import { useEffect, useState } from "react";
+import type { FilterValues } from "./UploadingNewImage";
 
 type ScreenImageProp = {
   selectedPost: Post;
@@ -12,6 +13,8 @@ type ScreenImageProp = {
   authorName: string;
   likesAmount: number;
   likeChecked: boolean;
+  scaleBigImage: number;
+  effectBigImage: FilterValues;
   onCloseModalWindow: () => void;
   addLikePost: (id: string) => void;
   addNewCommentInPost: (id: string, text: string) => void;
@@ -29,13 +32,15 @@ export function FullScreenImageDisplay(props: ScreenImageProp) {
     commentsAmount,
     likesAmount,
     likeChecked,
+    scaleBigImage,
+    effectBigImage,
     onCloseModalWindow,
     addLikePost,
     addNewCommentInPost,
   } = props;
 
   const [curShownCommentsAmount, setCurShownCommentsAmount] = useState(
-    Math.min(commentsAmount, LIMIT_SHOWING_NUMBER_COMMENTS)
+    Math.min(commentsAmount, LIMIT_SHOWING_NUMBER_COMMENTS),
   );
 
   const [inputValue, setInputValue] = useState("");
@@ -53,7 +58,7 @@ export function FullScreenImageDisplay(props: ScreenImageProp) {
 
   useEffect(() => {
     setCurShownCommentsAmount(
-      Math.min(commentsAmount, LIMIT_SHOWING_NUMBER_COMMENTS)
+      Math.min(commentsAmount, LIMIT_SHOWING_NUMBER_COMMENTS),
     );
     setInputValue("");
   }, [selectedPost.id]);
@@ -67,6 +72,10 @@ export function FullScreenImageDisplay(props: ScreenImageProp) {
           <img
             src={heroImgUrl}
             alt={heroImgAlt}
+            style={{
+              transform: `scale(${scaleBigImage / 100})`,
+              filter: `${effectBigImage}`,
+            }}
             width="600"
             height="600"
           />

@@ -1,17 +1,21 @@
 import { FullScreenImageDisplay } from "./FullScreenImageDisplay";
 import { ImageFilter } from "./ImageFilter";
 import { UsersImage } from "./UsersImage";
-import { UploadingNewImage } from "./UploadingNewImage";
+import {
+  UploadingNewImage,
+  type FilterValues,
+  type ScaleType,
+} from "./UploadingNewImage";
 import { useState } from "react";
 import { useModal } from "../context/useModal.ts";
 import { getNewComment } from "../data/getNewComment.ts";
-import { imageDescriptions } from "../data/imageDescriptionsArray.ts";
+import { newPostData } from "../data/imageDescriptionsArray.ts";
 import { getRandomInteger } from "../utils/randomInteger.ts";
 import type { FilterStatus } from "../types/types.ts";
 import { MAX_AVATAR, MIN_AVATAR } from "../constants/constants";
 
 export function MainBlock() {
-  const [posts, setPosts] = useState(imageDescriptions);
+  const [posts, setPosts] = useState(newPostData);
   const { curOpenModel, openModal, closeModal } = useModal();
   const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
 
@@ -21,6 +25,8 @@ export function MainBlock() {
     textAreaValue: string,
     authorName: string,
     urlImage: string,
+    scaleControlValue: ScaleType,
+    effectImage: FilterValues,
   ) {
     setPosts((posts) => {
       const avatarIndex = getRandomInteger(MIN_AVATAR, MAX_AVATAR);
@@ -31,6 +37,8 @@ export function MainBlock() {
           authorNamePost: authorName,
           authorAvatarPost: `src/img/avatar-${avatarIndex}.svg`,
           heroImgUrl: urlImage,
+          scale: scaleControlValue,
+          filter: effectImage,
           description: textAreaValue,
           likeAmount: 0,
           likeChecked: false,
@@ -75,7 +83,7 @@ export function MainBlock() {
   function filterPosts(currentFilter: FilterStatus) {
     setPosts((prev) => {
       if (currentFilter === "default") {
-        return imageDescriptions.slice();
+        return newPostData.slice();
       }
       if (currentFilter === "discussed") {
         return prev.toSorted(
@@ -102,6 +110,7 @@ export function MainBlock() {
             <UsersImage
               key={item.id}
               imgUrl={item.heroImgUrl}
+              effectsImg={item.filter as FilterValues}
               alt={item.description}
               commentsAmount={item.comments.length}
               likesAmount={item.likeAmount}
@@ -135,6 +144,8 @@ export function MainBlock() {
             addLikePost={addLikePost}
             authorName={selectedPost.authorNamePost}
             addNewCommentInPost={addNewCommentInPost}
+            scaleBigImage={selectedPost.scale}
+            effectBigImage={selectedPost.filter}
           />
         )}
       </section>
