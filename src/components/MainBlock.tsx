@@ -110,7 +110,7 @@ export function MainBlock() {
             <UsersImage
               key={item.id}
               imgUrl={item.heroImgUrl}
-              effectsImg={item.filter as FilterValues}
+              effectsImg={item.filter}
               alt={item.description}
               commentsAmount={item.comments.length}
               likesAmount={item.likeAmount}
