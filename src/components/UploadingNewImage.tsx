@@ -117,71 +117,48 @@ export function UploadingNewImage(props: UploadImageProp) {
     }
   }
 
-  function changeImageEffect(effectType: FilterOptions) {
-    setEffectImage(EFFECTS[effectType]);
-  }
-
   const EFFECT_PARAMETRES = [
     {
-      valueEffect: "none",
-      descriptionEffect: "Превью фото без эффекта",
-      nameEffect: "Оригинал",
-      checkedEffect: effectImage,
+      value: "none",
+      description: "Превью фото без эффекта",
+      name: "Оригинал",
+      selected: effectImage,
       defaultEffect: EFFECTS.none,
-      effect: "none",
-      /// Как лучше передавать, функцию или сразу записывать состояние?
-      chengeFilterEffect: () => changeImageEffect("none"),
-      // chengeFilterEffect: () => setEffectImage(EFFECTS.none),
     },
     {
-      valueEffect: "chrome",
-      descriptionEffect: "Превью эффекта Хром",
-      nameEffect: "Хром",
-      checkedEffect: effectImage,
+      value: "chrome",
+      description: "Превью эффекта Хром",
+      name: "Хром",
+      selected: effectImage,
       defaultEffect: EFFECTS.grayscale,
-      effect: "grayscale",
-      chengeFilterEffect: () => changeImageEffect("grayscale"),
-      // chengeFilterEffect: () => setEffectImage(EFFECTS.grayscale),
     },
     {
-      valueEffect: "sepia",
-      descriptionEffect: "Превью эффекта Сепия",
-      nameEffect: "Сепия",
-      checkedEffect: effectImage,
+      value: "sepia",
+      description: "Превью эффекта Сепия",
+      name: "Сепия",
+      selected: effectImage,
       defaultEffect: EFFECTS.sepia,
-      effect: "sepia",
-      chengeFilterEffect: () => changeImageEffect("sepia"),
-      // chengeFilterEffect: () => setEffectImage(EFFECTS.sepia),
     },
     {
-      valueEffect: "invert",
-      descriptionEffect: "Превью эффекта Марвин",
-      nameEffect: "Марвин",
-      checkedEffect: effectImage,
+      value: "invert",
+      description: "Превью эффекта Марвин",
+      name: "Марвин",
+      selected: effectImage,
       defaultEffect: EFFECTS.invert,
-      effect: "invert",
-      chengeFilterEffect: () => changeImageEffect("invert"),
-      // chengeFilterEffect: () => setEffectImage(EFFECTS.invert),
     },
     {
-      valueEffect: "phobos",
-      descriptionEffect: "Превью эффекта Фобос",
-      nameEffect: "Фобос",
-      checkedEffect: effectImage,
+      value: "phobos",
+      description: "Превью эффекта Фобос",
+      name: "Фобос",
+      selected: effectImage,
       defaultEffect: EFFECTS.blur,
-      effect: "blur",
-      chengeFilterEffect: () => changeImageEffect("blur"),
-      // chengeFilterEffect: () => setEffectImage(EFFECTS.blur),
     },
     {
-      valueEffect: "heat",
-      descriptionEffect: "Превью эффекта Зной",
-      nameEffect: "Зной",
-      checkedEffect: effectImage,
+      value: "heat",
+      description: "Превью эффекта Зной",
+      name: "Зной",
+      selected: effectImage,
       defaultEffect: EFFECTS.brightness,
-      effect: "brightness",
-      chengeFilterEffect: () => changeImageEffect("brightness"),
-      // chengeFilterEffect: () => setEffectImage(EFFECTS.brightness),
     },
   ];
 
@@ -272,13 +249,15 @@ export function UploadingNewImage(props: UploadImageProp) {
                   {EFFECT_PARAMETRES.map((effect) => {
                     return (
                       <EffectsItem
-                        key={Math.random()}
-                        valueEffect={effect.valueEffect}
-                        descriptionEffect={effect.descriptionEffect}
-                        nameEffect={effect.nameEffect}
-                        checkedEffect={effect.checkedEffect}
+                        key={effect.value}
+                        value={effect.value}
+                        description={effect.description}
+                        name={effect.name}
+                        selected={effect.selected}
                         defaultEffect={effect.defaultEffect}
-                        chengeFilterEffect={effect.chengeFilterEffect}
+                        changeFilterEffect={() =>
+                          setEffectImage(effect.defaultEffect)
+                        }
                       />
                     );
                   })}

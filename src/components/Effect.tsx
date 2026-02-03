@@ -1,22 +1,22 @@
 import type { FilterValues } from "./UploadingNewImage";
 
-type EffectType = {
-  valueEffect: string;
-  descriptionEffect: string;
-  nameEffect: string;
-  checkedEffect: FilterValues;
+type EffectsItemProps = {
+  value: string;
+  description: string;
+  name: string;
+  selected: FilterValues;
   defaultEffect: FilterValues;
-  chengeFilterEffect: () => void;
+  changeFilterEffect: (defaultEffect: FilterValues) => void;
 };
 
-export function EffectsItem(props: EffectType) {
+export function EffectsItem(props: EffectsItemProps) {
   const {
-    valueEffect,
-    descriptionEffect,
-    nameEffect,
-    checkedEffect,
+    value,
+    description,
+    name,
+    selected,
     defaultEffect,
-    chengeFilterEffect,
+    changeFilterEffect,
   } = props;
 
   return (
@@ -25,19 +25,19 @@ export function EffectsItem(props: EffectType) {
         className="effects__radio  visually-hidden"
         type="radio"
         name="effect"
-        id={`effect-${valueEffect}`}
-        value={`${valueEffect}`}
-        checked={checkedEffect === defaultEffect}
-        onChange={chengeFilterEffect}
+        id={`effect-${value}`}
+        value={`${value}`}
+        checked={selected === defaultEffect}
+        onChange={() => changeFilterEffect(defaultEffect)}
       />
       <label
         className="effects__label"
-        htmlFor={`effect-${valueEffect}`}
+        htmlFor={`effect-${value}`}
       >
-        <span className={`effects__preview  effects__preview--${valueEffect}`}>
-          {descriptionEffect}
+        <span className={`effects__preview  effects__preview--${value}`}>
+          {description}
         </span>
-        {nameEffect}
+        {name}
       </label>
     </li>
   );
