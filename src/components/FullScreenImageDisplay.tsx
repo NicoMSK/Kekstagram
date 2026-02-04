@@ -3,15 +3,8 @@ import { useEscClose } from "../hooks/useEscClose";
 import { CommentList } from "./CommentList";
 import { useEffect, useState } from "react";
 
-type ScreenImageProp = {
+type ScreenImageProps = {
   selectedPost: Post;
-  heroImgUrl: string;
-  heroImgAlt: string;
-  commentsAmount: number;
-  authorAvatarSvg: string;
-  authorName: string;
-  likesAmount: number;
-  likeChecked: boolean;
   onCloseModalWindow: () => void;
   addLikePost: (id: string) => void;
   addNewCommentInPost: (id: string, text: string) => void;
@@ -19,23 +12,13 @@ type ScreenImageProp = {
 
 const LIMIT_SHOWING_NUMBER_COMMENTS = 5;
 
-export function FullScreenImageDisplay(props: ScreenImageProp) {
-  const {
-    selectedPost,
-    heroImgUrl,
-    heroImgAlt,
-    authorAvatarSvg,
-    authorName,
-    commentsAmount,
-    likesAmount,
-    likeChecked,
-    onCloseModalWindow,
-    addLikePost,
-    addNewCommentInPost,
-  } = props;
+export function FullScreenImageDisplay(props: ScreenImageProps) {
+  const { selectedPost, onCloseModalWindow, addLikePost, addNewCommentInPost } =
+    props;
 
+  const commentsAmount = selectedPost.comments.length;
   const [curShownCommentsAmount, setCurShownCommentsAmount] = useState(
-    Math.min(commentsAmount, LIMIT_SHOWING_NUMBER_COMMENTS)
+    Math.min(commentsAmount, LIMIT_SHOWING_NUMBER_COMMENTS),
   );
 
   const [inputValue, setInputValue] = useState("");
@@ -53,7 +36,7 @@ export function FullScreenImageDisplay(props: ScreenImageProp) {
 
   useEffect(() => {
     setCurShownCommentsAmount(
-      Math.min(commentsAmount, LIMIT_SHOWING_NUMBER_COMMENTS)
+      Math.min(commentsAmount, LIMIT_SHOWING_NUMBER_COMMENTS),
     );
     setInputValue("");
   }, [selectedPost.id]);
@@ -65,8 +48,12 @@ export function FullScreenImageDisplay(props: ScreenImageProp) {
       <div className="big-picture__preview">
         <div className="big-picture__img">
           <img
-            src={heroImgUrl}
-            alt={heroImgAlt}
+            src={selectedPost.heroImgUrl}
+            alt={selectedPost.description}
+            style={{
+              transform: `scale(${selectedPost.scale / 100})`,
+              filter: `${selectedPost.filter}`,
+            }}
             width="600"
             height="600"
           />
@@ -75,23 +62,23 @@ export function FullScreenImageDisplay(props: ScreenImageProp) {
           <div className="social__header">
             <img
               className="social__picture"
-              src={authorAvatarSvg}
-              alt={authorName}
+              src={selectedPost.authorAvatarPost}
+              alt={selectedPost.authorNamePost}
               width="35"
               height="35"
             />
-            <p className="social__caption">{heroImgAlt}</p>
+            <p className="social__caption">{selectedPost.description}</p>
             <p className="social__likes">
               Нравится{" "}
               <span
                 className={`likes-count ${
-                  likeChecked && "likes-count--active"
+                  selectedPost.likeChecked && "likes-count--active"
                 }`}
                 onClick={() => {
                   addLikePost(selectedPost.id);
                 }}
               >
-                {likesAmount}
+                {selectedPost.likeAmount}
               </span>
             </p>
           </div>
@@ -108,8 +95,8 @@ export function FullScreenImageDisplay(props: ScreenImageProp) {
           >
             <img
               className="social__picture"
-              src={authorAvatarSvg}
-              alt={authorName}
+              src={selectedPost.authorAvatarPost}
+              alt={selectedPost.authorNamePost}
               width="35"
               height="35"
             />

@@ -1,27 +1,29 @@
 import { FullScreenImageDisplay } from "./FullScreenImageDisplay";
 import { ImageFilter } from "./ImageFilter";
 import { UsersImage } from "./UsersImage";
-import { UploadingNewImage } from "./UploadingNewImage";
+import { UploadingNewImage, type AddNewPostType } from "./UploadingNewImage";
 import { useState } from "react";
 import { useModal } from "../context/useModal.ts";
 import { getNewComment } from "../data/getNewComment.ts";
-import { imageDescriptions } from "../data/imageDescriptionsArray.ts";
+import { INITIAL_POSTS_DATA } from "../data/imageDescriptionsArray.ts";
 import { getRandomInteger } from "../utils/randomInteger.ts";
 import type { FilterStatus } from "../types/types.ts";
 import { MAX_AVATAR, MIN_AVATAR } from "../constants/constants";
 
 export function MainBlock() {
-  const [posts, setPosts] = useState(imageDescriptions);
+  const [posts, setPosts] = useState(INITIAL_POSTS_DATA);
   const { curOpenModel, openModal, closeModal } = useModal();
   const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
 
   const selectedPost = posts.find((post) => post.id === selectedPostId);
 
-  function addNewPost(
-    textAreaValue: string,
-    authorName: string,
-    urlImage: string,
-  ) {
+  function addNewPost({
+    descriptionImage,
+    authorName,
+    urlImage,
+    scaleControlValue,
+    effectImage,
+  }: AddNewPostType) {
     setPosts((posts) => {
       const avatarIndex = getRandomInteger(MIN_AVATAR, MAX_AVATAR);
 
@@ -31,7 +33,9 @@ export function MainBlock() {
           authorNamePost: authorName,
           authorAvatarPost: `src/img/avatar-${avatarIndex}.svg`,
           heroImgUrl: urlImage,
-          description: textAreaValue,
+          scale: scaleControlValue,
+          filter: effectImage,
+          description: descriptionImage,
           likeAmount: 0,
           likeChecked: false,
           comments: [],
@@ -75,7 +79,7 @@ export function MainBlock() {
   function filterPosts(currentFilter: FilterStatus) {
     setPosts((prev) => {
       if (currentFilter === "default") {
-        return imageDescriptions.slice();
+        return INITIAL_POSTS_DATA.slice();
       }
       if (currentFilter === "discussed") {
         return prev.toSorted(
@@ -102,6 +106,7 @@ export function MainBlock() {
             <UsersImage
               key={item.id}
               imgUrl={item.heroImgUrl}
+              effectsImg={item.filter}
               alt={item.description}
               commentsAmount={item.comments.length}
               likesAmount={item.likeAmount}
@@ -126,14 +131,7 @@ export function MainBlock() {
           <FullScreenImageDisplay
             selectedPost={selectedPost}
             onCloseModalWindow={closeModal}
-            heroImgUrl={selectedPost.heroImgUrl}
-            heroImgAlt={selectedPost.description}
-            commentsAmount={selectedPost.comments.length}
-            authorAvatarSvg={selectedPost.authorAvatarPost}
-            likesAmount={selectedPost.likeAmount}
-            likeChecked={selectedPost.likeChecked}
             addLikePost={addLikePost}
-            authorName={selectedPost.authorNamePost}
             addNewCommentInPost={addNewCommentInPost}
           />
         )}

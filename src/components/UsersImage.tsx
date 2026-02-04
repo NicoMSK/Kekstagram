@@ -1,13 +1,17 @@
+import type { FilterValues } from "./UploadingNewImage";
+
 type UsersImageProps = {
   imgUrl: string;
   alt: string;
   commentsAmount: number;
   likesAmount: number;
+  effectsImg: FilterValues;
   onClick: () => void;
 };
 
 export function UsersImage(props: UsersImageProps) {
-  const { imgUrl, alt, commentsAmount, likesAmount, onClick } = props;
+  const { imgUrl, alt, commentsAmount, likesAmount, effectsImg, onClick } =
+    props;
 
   return (
     <a
@@ -20,6 +24,7 @@ export function UsersImage(props: UsersImageProps) {
         src={imgUrl}
         width="182"
         height="182"
+        style={{ filter: `${effectsImg}` }}
         alt={alt}
       />
       <p className="picture__info">
