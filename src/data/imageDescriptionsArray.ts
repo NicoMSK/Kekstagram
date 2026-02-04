@@ -9,7 +9,7 @@ import { getRandomInteger } from "../utils/randomInteger";
 import { EFFECTS } from "../components/UploadingNewImage";
 import type { Post } from "../types/types";
 
-export const newPostData: Post[] = Array.from({ length: 25 }, (_, i) => {
+export const INITIAL_POSTS_DATA: Post[] = Array.from({ length: 25 }, (_, i) => {
   const postNumber = i + 1;
   const authorIndex = getRandomInteger(0, NAMES.length - 1);
   const avatarIndex = getRandomInteger(MIN_AVATAR, MAX_AVATAR);

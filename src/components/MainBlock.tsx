@@ -5,13 +5,13 @@ import { UploadingNewImage, type AddNewPostType } from "./UploadingNewImage";
 import { useState } from "react";
 import { useModal } from "../context/useModal.ts";
 import { getNewComment } from "../data/getNewComment.ts";
-import { newPostData } from "../data/imageDescriptionsArray.ts";
+import { INITIAL_POSTS_DATA } from "../data/imageDescriptionsArray.ts";
 import { getRandomInteger } from "../utils/randomInteger.ts";
 import type { FilterStatus } from "../types/types.ts";
 import { MAX_AVATAR, MIN_AVATAR } from "../constants/constants";
 
 export function MainBlock() {
-  const [posts, setPosts] = useState(newPostData);
+  const [posts, setPosts] = useState(INITIAL_POSTS_DATA);
   const { curOpenModel, openModal, closeModal } = useModal();
   const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
 
@@ -79,7 +79,7 @@ export function MainBlock() {
   function filterPosts(currentFilter: FilterStatus) {
     setPosts((prev) => {
       if (currentFilter === "default") {
-        return newPostData.slice();
+        return INITIAL_POSTS_DATA.slice();
       }
       if (currentFilter === "discussed") {
         return prev.toSorted(
