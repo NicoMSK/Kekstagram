@@ -22,19 +22,21 @@ export type FilterValues = (typeof EFFECTS)[keyof typeof EFFECTS];
 type ButtonType = "smaller" | "bigger";
 export type ScaleType = 25 | 50 | 75 | 100;
 
+export type AddNewPostType = {
+  descriptionImage: string;
+  authorName: string;
+  urlImage: string;
+  scaleControlValue: ScaleType;
+  effectImage: FilterValues;
+};
+
 type UploadImageProp = {
-  addNewPost: (
-    textAreaValue: string,
-    authorName: string,
-    urlImage: string,
-    scaleControlValue: ScaleType,
-    effectImage: FilterValues,
-  ) => void;
+  addNewPost: (data: AddNewPostType) => void;
 };
 
 export function UploadingNewImage(props: UploadImageProp) {
   const { curOpenModel, openModal, closeModal } = useModal();
-  const [textareaValue, setTextareaValue] = useState("");
+  const [descriptionImage, setDescriptionImage] = useState("");
   const [authorName, setAuthorName] = useState("");
   const [urlImage, setUrlImage] = useState<string | null>(null);
   const [scaleControlValue, setScaleControlValue] =
@@ -43,10 +45,10 @@ export function UploadingNewImage(props: UploadImageProp) {
   const [isEmptyValue, setIsEmptyValue] = useState(false);
   const { addNewPost } = props;
 
-  const isTextareaError = textareaValue.length > MAX_TEXT_LENGTH;
+  const isDescriptionImageError = descriptionImage.length > MAX_TEXT_LENGTH;
 
   function closeModalNewPost() {
-    setTextareaValue("");
+    setDescriptionImage("");
     setAuthorName("");
     setScaleControlValue(DEFAULT_SCALE);
     setIsEmptyValue(false);
@@ -79,7 +81,10 @@ export function UploadingNewImage(props: UploadImageProp) {
   const handleAddNewPost = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (authorName.trim().length === 0 || textareaValue.trim().length === 0) {
+    if (
+      authorName.trim().length === 0 ||
+      descriptionImage.trim().length === 0
+    ) {
       setIsEmptyValue(true);
       return;
     }
@@ -89,13 +94,13 @@ export function UploadingNewImage(props: UploadImageProp) {
       return;
     }
 
-    addNewPost(
-      textareaValue,
+    addNewPost({
+      descriptionImage,
       authorName,
       urlImage,
       scaleControlValue,
       effectImage,
-    );
+    });
     closeModalNewPost();
   };
 
@@ -285,17 +290,17 @@ export function UploadingNewImage(props: UploadImageProp) {
                     className="text__description"
                     name="description"
                     placeholder="Ваше описание..."
-                    value={textareaValue}
+                    value={descriptionImage}
                     onChange={(e) => {
-                      setTextareaValue(e.target.value);
+                      setDescriptionImage(e.target.value);
                     }}
                   ></textarea>
                   <span
                     className={`text__count ${
-                      isTextareaError && "text__count--error"
+                      isDescriptionImageError && "text__count--error"
                     }`}
                   >
-                    {textareaValue.length}/{MAX_TEXT_LENGTH} символов
+                    {descriptionImage.length}/{MAX_TEXT_LENGTH} символов
                   </span>
                 </div>
               </fieldset>
@@ -303,7 +308,7 @@ export function UploadingNewImage(props: UploadImageProp) {
                 className="img-upload__submit"
                 type="submit"
                 id="upload-submit"
-                disabled={isTextareaError}
+                disabled={isDescriptionImageError}
               >
                 Опубликовать
               </button>
