@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useModal } from "../context/useModal.ts";
 import { useEscClose } from "../hooks/useEscClose";
+import { EffectsItem } from "./Effect.tsx";
 
 const MAX_TEXT_LENGTH = 142;
 const DEFAULT_SCALE = 100;
@@ -15,7 +16,7 @@ export const EFFECTS = {
   brightness: "brightness(3)",
 } as const;
 
-type FilterOptions = keyof typeof EFFECTS;
+export type FilterOptions = keyof typeof EFFECTS;
 export type FilterValues = (typeof EFFECTS)[keyof typeof EFFECTS];
 
 type ButtonType = "smaller" | "bigger";
@@ -121,9 +122,50 @@ export function UploadingNewImage(props: UploadImageProp) {
     }
   }
 
-  function changeImageEffect(effectType: FilterOptions) {
-    setEffectImage(EFFECTS[effectType]);
-  }
+  const EFFECT_PARAMETRES = [
+    {
+      value: "none",
+      description: "Превью фото без эффекта",
+      name: "Оригинал",
+      selected: effectImage,
+      defaultEffect: EFFECTS.none,
+    },
+    {
+      value: "chrome",
+      description: "Превью эффекта Хром",
+      name: "Хром",
+      selected: effectImage,
+      defaultEffect: EFFECTS.grayscale,
+    },
+    {
+      value: "sepia",
+      description: "Превью эффекта Сепия",
+      name: "Сепия",
+      selected: effectImage,
+      defaultEffect: EFFECTS.sepia,
+    },
+    {
+      value: "invert",
+      description: "Превью эффекта Марвин",
+      name: "Марвин",
+      selected: effectImage,
+      defaultEffect: EFFECTS.invert,
+    },
+    {
+      value: "phobos",
+      description: "Превью эффекта Фобос",
+      name: "Фобос",
+      selected: effectImage,
+      defaultEffect: EFFECTS.blur,
+    },
+    {
+      value: "heat",
+      description: "Превью эффекта Зной",
+      name: "Зной",
+      selected: effectImage,
+      defaultEffect: EFFECTS.brightness,
+    },
+  ];
 
   return (
     <section className="img-upload">
@@ -209,126 +251,21 @@ export function UploadingNewImage(props: UploadImageProp) {
               </div>
               <fieldset className="img-upload__effects  effects">
                 <ul className="effects__list">
-                  <li className="effects__item">
-                    <input
-                      className="effects__radio  visually-hidden"
-                      type="radio"
-                      name="effect"
-                      id="effect-none"
-                      value="none"
-                      checked={effectImage === "none"}
-                      onChange={() => changeImageEffect("none")}
-                    />
-                    <label
-                      className="effects__label"
-                      htmlFor="effect-none"
-                    >
-                      <span className="effects__preview  effects__preview--none">
-                        Превью фото без эффекта
-                      </span>
-                      Оригинал
-                    </label>
-                  </li>
-                  <li className="effects__item">
-                    <input
-                      className="effects__radio  visually-hidden"
-                      type="radio"
-                      name="effect"
-                      id="effect-chrome"
-                      value="chrome"
-                      checked={effectImage === "grayscale(1)"}
-                      onChange={() => changeImageEffect("grayscale")}
-                    />
-                    <label
-                      className="effects__label"
-                      htmlFor="effect-chrome"
-                    >
-                      <span className="effects__preview  effects__preview--chrome">
-                        Превью эффекта Хром
-                      </span>
-                      Хром
-                    </label>
-                  </li>
-                  <li className="effects__item">
-                    <input
-                      className="effects__radio  visually-hidden"
-                      type="radio"
-                      name="effect"
-                      id="effect-sepia"
-                      value="sepia"
-                      checked={effectImage === "sepia(1)"}
-                      onChange={() => changeImageEffect("sepia")}
-                    />
-                    <label
-                      className="effects__label"
-                      htmlFor="effect-sepia"
-                    >
-                      <span className="effects__preview  effects__preview--sepia">
-                        Превью эффекта Сепия
-                      </span>
-                      Сепия
-                    </label>
-                  </li>
-                  <li className="effects__item">
-                    <input
-                      className="effects__radio  visually-hidden"
-                      type="radio"
-                      name="effect"
-                      id="effect-marvin"
-                      value="marvin"
-                      checked={effectImage === "invert(100%)"}
-                      onChange={() => changeImageEffect("invert")}
-                    />
-                    <label
-                      className="effects__label"
-                      htmlFor="effect-marvin"
-                    >
-                      <span className="effects__preview  effects__preview--marvin">
-                        Превью эффекта Марвин
-                      </span>
-                      Марвин
-                    </label>
-                  </li>
-                  <li className="effects__item">
-                    <input
-                      className="effects__radio  visually-hidden"
-                      type="radio"
-                      name="effect"
-                      id="effect-phobos"
-                      value="phobos"
-                      checked={effectImage === "blur(10px)"}
-                      onChange={() => changeImageEffect("blur")}
-                    />
-                    <label
-                      className="effects__label"
-                      htmlFor="effect-phobos"
-                    >
-                      <span className="effects__preview  effects__preview--phobos">
-                        Превью эффекта Фобос
-                      </span>
-                      Фобос
-                    </label>
-                  </li>
-                  <li className="effects__item">
-                    <input
-                      className="effects__radio  visually-hidden"
-                      type="radio"
-                      name="effect"
-                      id="effect-heat"
-                      value="heat"
-                      checked={effectImage === "brightness(3)"}
-                      onChange={() => changeImageEffect("brightness")}
-                    />
-                    <label
-                      className="effects__label"
-                      htmlFor="effect-heat"
-                    >
-                      <span className="effects__preview  effects__preview--heat">
-                        Превью эффекта Зной
-                      </span>
-                      Зной
-                    </label>
-                  </li>
+                  {EFFECT_PARAMETRES.map((effect) => {
+                    return (
+                      <EffectsItem
+                        key={effect.value}
+                        value={effect.value}
+                        description={effect.description}
+                        name={effect.name}
+                        selected={effect.selected}
+                        defaultEffect={effect.defaultEffect}
+                        changeFilterEffect={() =>
+                          setEffectImage(effect.defaultEffect)
+                        }
+                      />
+                    );
+                  })}
                 </ul>
               </fieldset>
               <fieldset className="img-upload__text text">
