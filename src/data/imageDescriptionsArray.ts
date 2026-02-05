@@ -17,8 +17,8 @@ export const INITIAL_POSTS_DATA: Post[] = Array.from({ length: 25 }, (_, i) => {
 
   return {
     id: crypto.randomUUID(),
-    heroImgUrl: `/photos/${postNumber}.jpg`,
-    authorAvatarPost: `/img/avatar-${avatarIndex}.svg`,
+    heroImgUrl: `photos/${postNumber}.jpg`,
+    authorAvatarPost: `img/avatar-${avatarIndex}.svg`,
     authorNamePost: NAMES[authorIndex],
     description: `${DESCRIPTION[descIndex]}`,
     likeAmount: Math.floor(Math.random() * 100) + 10,
