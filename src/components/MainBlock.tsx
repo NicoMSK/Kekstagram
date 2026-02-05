@@ -31,7 +31,7 @@ export function MainBlock() {
         {
           id: crypto.randomUUID(),
           authorNamePost: authorName,
-          authorAvatarPost: `src/img/avatar-${avatarIndex}.svg`,
+          authorAvatarPost: `/img/avatar-${avatarIndex}.svg`,
           heroImgUrl: urlImage,
           scale: scaleControlValue,
           filter: effectImage,
